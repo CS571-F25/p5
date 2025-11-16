@@ -1,0 +1,60 @@
+const assignmentsData = [
+  {"name": "Circuit Lab", "subject": "ECE 252", "duedate": "11/16/2025", "status": "todo", "notes": "", "notes": ""},
+  {"name": "Digital Logic Homework", "subject": "ECE 252", "duedate": "11/21/2025", "status": "todo", "notes": "", "notes": ""},
+  {"name": "Embedded Systems Practice", "subject": "ECE 252", "duedate": "11/26/2025", "status": "todo", "notes": ""},
+  {"name": "Signal Analysis Task", "subject": "ECE 252", "duedate": "12/01/2025", "status": "todo", "notes": ""},
+  {"name": "FPGA Exercise", "subject": "ECE 252", "duedate": "12/06/2025", "status": "todo", "notes": ""},
+  {"name": "Hardware Debugging", "subject": "ECE 252", "duedate": "12/11/2025", "status": "todo", "notes": ""},
+  {"name": "Circuit Optimization", "subject": "ECE 252", "duedate": "12/16/2025", "status": "todo", "notes": ""},
+
+  {"name": "ML Pipeline Homework", "subject": "COMP SCI 571", "duedate": "11/16/2025", "status": "todo", "notes": ""},
+  {"name": "Neural Network Practice", "subject": "COMP SCI 571", "duedate": "11/21/2025", "status": "todo", "notes": ""},
+  {"name": "Data Prep Assignment", "subject": "COMP SCI 571", "duedate": "11/26/2025", "status": "todo", "notes": ""},
+  {"name": "Model Evaluation Task", "subject": "COMP SCI 571", "duedate": "12/01/2025", "status": "todo", "notes": ""},
+  {"name": "Clustering Exercise", "subject": "COMP SCI 571", "duedate": "12/06/2025", "status": "todo", "notes": ""},
+  {"name": "Classification Practice", "subject": "COMP SCI 571", "duedate": "12/11/2025", "status": "todo", "notes": ""},
+  {"name": "Deep Learning Notes", "subject": "COMP SCI 571", "duedate": "12/16/2025", "status": "todo", "notes": ""},
+
+  {"name": "Cell Biology Worksheet", "subject": "BIO 330", "duedate": "11/16/2025", "status": "todo", "notes": ""},
+  {"name": "Gene Expression Homework", "subject": "BIO 330", "duedate": "11/21/2025", "status": "todo", "notes": ""},
+  {"name": "Protein Structure Notes", "subject": "BIO 330", "duedate": "11/26/2025", "status": "todo", "notes": ""},
+  {"name": "Metabolism Worksheet", "subject": "BIO 330", "duedate": "12/01/2025", "status": "todo", "notes": ""},
+  {"name": "Cell Division Review", "subject": "BIO 330", "duedate": "12/06/2025", "status": "todo", "notes": ""},
+  {"name": "Genetics Practice", "subject": "BIO 330", "duedate": "12/11/2025", "status": "todo", "notes": ""},
+  {"name": "Genetics Worksheet", "subject": "BIO 330", "duedate": "12/16/2025", "status": "todo", "notes": ""},
+
+  {"name": "Metadata Assignment", "subject": "L I S 440", "duedate": "11/16/2025", "status": "todo", "notes": ""},
+  {"name": "Digital Archives Task", "subject": "L I S 440", "duedate": "11/21/2025", "status": "todo", "notes": ""},
+  {"name": "Information Retrieval Work", "subject": "L I S 440", "duedate": "11/26/2025", "status": "todo", "notes": ""},
+  {"name": "Database Worksheet", "subject": "L I S 440", "duedate": "12/01/2025", "status": "todo", "notes": ""},
+  {"name": "Catalog Design Task", "subject": "L I S 440", "duedate": "12/06/2025", "status": "todo", "notes": ""},
+  {"name": "Taxonomy Notes", "subject": "L I S 440", "duedate": "12/11/2025", "status": "todo", "notes": ""},
+  {"name": "Metadata Review", "subject": "L I S 440", "duedate": "12/16/2025", "status": "todo", "notes": ""},
+
+  {"name": "Vector Calculus Homework", "subject": "MATH 221", "duedate": "11/16/2025", "status": "todo", "notes": ""},
+  {"name": "Optimization Problems", "subject": "MATH 221", "duedate": "11/21/2025", "status": "todo", "notes": ""},
+  {"name": "Gradient Practice", "subject": "MATH 221", "duedate": "11/26/2025", "status": "todo", "notes": ""},
+  {"name": "Integral Problems", "subject": "MATH 221", "duedate": "12/01/2025", "status": "todo", "notes": ""},
+  {"name": "Surface Integrals", "subject": "MATH 221", "duedate": "12/06/2025", "status": "todo", "notes": ""},
+  {"name": "Parametric Curves", "subject": "MATH 221", "duedate": "12/11/2025", "status": "todo", "notes": ""},
+  {"name": "Vector Review", "subject": "MATH 221", "duedate": "12/16/2025", "status": "todo", "notes": ""},
+
+  {"name": "Probability Worksheet", "subject": "STAT 222", "duedate": "11/16/2025", "status": "todo", "notes": ""},
+  {"name": "Regression Homework", "subject": "STAT 222", "duedate": "11/21/2025", "status": "todo", "notes": ""},
+  {"name": "Hypothesis Testing Practice", "subject": "STAT 222", "duedate": "11/26/2025", "status": "todo", "notes": ""},
+  {"name": "Sampling Problems", "subject": "STAT 222", "duedate": "12/01/2025", "status": "todo", "notes": ""},
+  {"name": "ANOVA Worksheet", "subject": "STAT 222", "duedate": "12/06/2025", "status": "todo", "notes": ""},
+  {"name": "Correlation Review", "subject": "STAT 222", "duedate": "12/11/2025", "status": "todo", "notes": ""},
+  {"name": "Stochastic Modeling Task", "subject": "STAT 222", "duedate": "12/16/2025", "status": "todo", "notes": ""},
+
+  {"name": "Thermodynamics Homework", "subject": "CHEM 340", "duedate": "11/16/2025", "status": "todo", "notes": ""},
+  {"name": "Kinetics Worksheet", "subject": "CHEM 340", "duedate": "11/18/2025", "status": "todo", "notes": ""},
+  {"name": "Quantum Chemistry Problems", "subject": "CHEM 340", "duedate": "11/21/2025", "status": "todo", "notes": ""},
+  {"name": "Spectroscopy Worksheet", "subject": "CHEM 340", "duedate": "11/26/2025", "status": "todo", "notes": ""},
+  {"name": "Reaction Mechanisms", "subject": "CHEM 340", "duedate": "12/01/2025", "status": "todo", "notes": ""},
+  {"name": "Equilibrium Practice", "subject": "CHEM 340", "duedate": "12/06/2025", "status": "todo", "notes": ""},
+  {"name": "Organic Chemistry Notes", "subject": "CHEM 340", "duedate": "12/11/2025", "status": "todo", "notes": ""},
+  {"name": "Chemistry Review", "subject": "CHEM 340", "duedate": "12/16/2025", "status": "todo", "notes": ""}
+];
+
+export default assignmentsData;
