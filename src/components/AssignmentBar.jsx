@@ -1,4 +1,5 @@
 import React from "react";
+import { Button, Dropdown, DropdownButton } from "react-bootstrap";
 
 const styles = {
     container: {
@@ -50,29 +51,45 @@ const styles = {
     },
     statusDropdown: {
         border: "none",
-        backgroundColor: "#e5e5e5",
         padding: "10px 16px",
         borderRadius: "20px",
         cursor: "pointer",
-        fontWeight: "500",
-        color: "#333"
+        fontWeight: "500"
     }
 };
 
+const statusColors = {
+    "todo": { background: "#e8d9ff", color: "#5e3a8c" },
+    "in-progress": { background: "#ffd4d4", color: "#b32424" },
+    "done": { background: "#c9f7d7", color: "#1e7a44" }
+};
+
 export default function AssignmentBar(props) {
+
+    const currentColor = statusColors[props.status] || {
+        background: "#e5e5e5",
+        color: "#333"
+    };
+
+    const dropdownStyle = {
+        ...styles.statusDropdown,
+        backgroundColor: currentColor.background,
+        color: currentColor.color
+    };
+
     return <div style={styles.container}>
         <div style={styles.textSection}>
             <div style={styles.name}>{props.name}</div>
             <div style={styles.subject}>{props.subject}</div>
         </div>
 
-        <button style={styles.dateButton}>{props.duedate}</button>
-        <button style={styles.notesButton} onClick={props.onNotesClick}>Notes</button>
+        <Button style={styles.dateButton}>{props.duedate}</Button>
+        <Button style={styles.notesButton} onClick={props.onNotesClick}>Notes</Button>
 
-        <select value={props.status} style={styles.statusDropdown} onChange={(e) => props.onStatusChange(e.target.value)}>
-            <option value="todo">To Do</option>
-            <option value="in-progress">In Progress</option>
-            <option value="done">Done</option>
+        <select value={props.status} style={dropdownStyle} onChange={(e) => props.onStatusChange(e.target.value)}>
+            <option value="todo" style={{ color: statusColors["todo"].color }}>To Do</option>
+            <option value="in-progress" style={{ color: statusColors["in-progress"].color }}>In Progress</option>
+            <option value="done" style={{ color: statusColors["done"].color }}>Done</option>
         </select>
     </div>
 }

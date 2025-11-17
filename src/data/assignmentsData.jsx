@@ -1,6 +1,6 @@
 const assignmentsData = [
-  {"name": "Circuit Lab", "subject": "ECE 252", "duedate": "11/16/2025", "status": "todo", "notes": "", "notes": ""},
-  {"name": "Digital Logic Homework", "subject": "ECE 252", "duedate": "11/21/2025", "status": "todo", "notes": "", "notes": ""},
+  {"name": "Circuit Lab", "subject": "ECE 252", "duedate": "11/16/2025", "status": "todo", "notes": ""},
+  {"name": "Digital Logic Homework", "subject": "ECE 252", "duedate": "11/21/2025", "status": "todo", "notes": ""},
   {"name": "Embedded Systems Practice", "subject": "ECE 252", "duedate": "11/26/2025", "status": "todo", "notes": ""},
   {"name": "Signal Analysis Task", "subject": "ECE 252", "duedate": "12/01/2025", "status": "todo", "notes": ""},
   {"name": "FPGA Exercise", "subject": "ECE 252", "duedate": "12/06/2025", "status": "todo", "notes": ""},
