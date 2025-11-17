@@ -14,7 +14,7 @@ const styles = {
         zIndex: 1000,
         display: "flex",
         flexDirection: "column"
-    }, 
+    },
     closeButton: {
         alignSelf: "flex-end",
         border: "none",
@@ -74,21 +74,40 @@ const styles = {
 };
 
 export default function NotesPanel(props) {
-    return <div style={styles.panel}>
-        <button style={styles.closeButton} onClick={props.onClose}>×</button>
+    const panelStyle = {
+        ...styles.panel,
+        width: props.fullScreen ? "100vw" : "800px",
+        left: props.fullScreen ? 0 : "auto",
+        right: props.fullScreen ? 0 : 0,
+    };
 
-        <div style={styles.title}>{props.assignment.name}</div>
+    const textareaStyle = {
+        ...styles.textarea,
+        flexGrow: 1
+    };
 
-        <Stack direction="horizontal" gap={3} style={styles.subheading}>
-            <button style={styles.subjectButton}>{props.assignment.subject}</button>
-            <button style={styles.dateButton}>{props.assignment.duedate}</button>
-            <select value={props.assignment.status} style={styles.statusDropdown}>
-                <option value="todo">To Do</option>
-                <option value="in-progress">In Progress</option>
-                <option value="done">Done</option>
-            </select>
-        </Stack>
+    return (
+        <div style={panelStyle}>
+            <button style={styles.closeButton} onClick={props.onClose}>×</button>
 
-        <textarea style={styles.textarea} value={props.assignment.notes} onChange={(e) => props.onNotesChange(e.target.value)} placeholder="Write your notes here..." />
-    </div>
+            <div style={styles.title}>{props.assignment.name}</div>
+
+            <Stack direction="horizontal" gap={3} style={styles.subheading}>
+                <button style={styles.subjectButton}>{props.assignment.subject}</button>
+                <button style={styles.dateButton}>{props.assignment.duedate}</button>
+                <select value={props.assignment.status} style={styles.statusDropdown}>
+                    <option value="todo">To Do</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="done">Done</option>
+                </select>
+            </Stack>
+
+            <textarea
+                style={textareaStyle}
+                value={props.assignment.notes}
+                onChange={(e) => props.onNotesChange(e.target.value)}
+                placeholder="Write your notes here..."
+            />
+        </div>
+    );
 }

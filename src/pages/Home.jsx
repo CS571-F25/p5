@@ -5,7 +5,7 @@ import AssignmentBar from "../components/AssignmentBar";
 import NotesPanel from "../components/NotesPanel";
 import AddAssigmentModal from "../components/AddAssignmentModal";
 
-export default function Home (props) {
+export default function Home(props) {
 
     // hard-coded values that will be fetched actually
     const name = "Stella";
@@ -41,25 +41,32 @@ export default function Home (props) {
         <Button variant="primary" onClick={() => setShowModal(true)}>Create Assignment</Button>
         <Stack gap={3}>
             {sortedAssignments.map((assignment, index) => (
-                <AssignmentBar key={index} {...assignment} 
-                onStatusChange={(newStatus) => {
-                    setAssignments(prev => {
+                <AssignmentBar key={index} {...assignment}
+                    onStatusChange={(newStatus) => {
+                        setAssignments(prev => {
+                            const originalIndex = assignments.indexOf(assignment);
+                            const updated = [...prev];
+                            updated[originalIndex].status = newStatus;
+                            return updated;
+                        });
+                    }}
+                    onNotesClick={() => {
                         const originalIndex = assignments.indexOf(assignment);
-                        const updated = [...prev];
-                        updated[originalIndex].status = newStatus;
-                        return updated;
-                    });
-                }}
-                onNotesClick={() => {
-                    const originalIndex = assignments.indexOf(assignment);
-                    handleOpenNotes(originalIndex)
-                }}
+                        handleOpenNotes(originalIndex)
+                    }}
                 />
             ))}
         </Stack>
 
-        {openNotes != null && <NotesPanel assignment={assignments[openNotes]} onClose={handleCloseNotes} onNotesChange={handleNotesChange} />}
-        
+        {openNotes != null && (
+            <NotesPanel
+                assignment={assignments[openNotes]}
+                onClose={handleCloseNotes}
+                onNotesChange={handleNotesChange}
+                fullScreen={false}
+            />
+        )}
+
         <AddAssigmentModal show={showModal} onClose={() => setShowModal(false)} onSubmit={handleAddAssignment} />
     </div>
 }
