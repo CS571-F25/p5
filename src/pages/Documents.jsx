@@ -7,10 +7,6 @@ export default function Documents() {
     const [search, setSearch] = useState("");
     const navigate = useNavigate();
 
-    const filtered = assignmentsData.filter(a =>
-        a.name.toLowerCase().includes(search.toLowerCase())
-    );
-
     return (
         <Container style={{ marginTop: "20px" }}>
             <Form.Control
@@ -27,28 +23,35 @@ export default function Documents() {
             />
 
             <Row xs={1} sm={2} md={3} lg={3} className="g-4">
-                {filtered.map((assignment, index) => (
-                    <Col key={index}>
-                        <Card
-                            onClick={() => navigate(`/documents/${index}`)}
-                            style={{
-                                cursor: "pointer",
-                                borderRadius: "15px",
-                                padding: "10px",
-                                minHeight: "150px",
-                                boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
-                            }}
-                        >
-                            <Card.Body>
-                                <Card.Title className="fw-bold">{assignment.name}</Card.Title>
-                                <Card.Text>
-                                    <strong>Subject:</strong> {assignment.subject} <br />
-                                    <strong>Due:</strong> {assignment.duedate}
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
+                {assignmentsData.map((assignment, index) => {
+                    const isVisible = assignment.name.toLowerCase().includes(search.toLowerCase());
+
+                    return (
+                        <Col key={index}>
+                            <Card
+                                onClick={() => isVisible && navigate(`/documents/${index}`)}
+                                style={{
+                                    cursor: isVisible ? "pointer" : "default",
+                                    borderRadius: "15px",
+                                    padding: "10px",
+                                    minHeight: "150px",
+                                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                                    opacity: isVisible ? 1 : 0,     
+                                    visibility: isVisible ? "visible" : "hidden",
+                                    pointerEvents: isVisible ? "auto" : "none"
+                                }}
+                            >
+                                <Card.Body>
+                                    <Card.Title className="fw-bold">{assignment.name}</Card.Title>
+                                    <Card.Text>
+                                        <strong>Subject:</strong> {assignment.subject} <br />
+                                        <strong>Due:</strong> {assignment.duedate}
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    );
+                })}
             </Row>
         </Container>
     );
