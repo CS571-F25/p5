@@ -1,11 +1,36 @@
 import React, { useState } from "react";
-import { Card, Container, Row, Col, Form } from "react-bootstrap";
+import { Card, Container, Row, Col, Form, Pagination } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import assignmentsData from "../data/assignmentsData";
 
 export default function Documents() {
     const [search, setSearch] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate();
+
+    const cardsPerPage = 9;
+    const cardWidth = 300;
+    
+    const filtered = assignmentsData.filter(a =>
+        a.name.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const totalPages = Math.ceil(filtered.length / cardsPerPage);
+    const startIndex = (currentPage - 1) * cardsPerPage;
+    const currentAssignments = filtered.slice(startIndex, startIndex + cardsPerPage);
+
+    const paginationItems = [];
+    for (let number = 1; number <= totalPages; number++) {
+        paginationItems.push(
+            <Pagination.Item
+                key={number}
+                active={number === currentPage}
+                onClick={() => setCurrentPage(number)}
+            >
+                {number}
+            </Pagination.Item>
+        );
+    }
 
     return (
         <Container style={{ marginTop: "20px" }}>
@@ -13,7 +38,10 @@ export default function Documents() {
                 type="text"
                 placeholder="Search assignments..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                    setSearch(e.target.value);
+                    setCurrentPage(1);
+                }}
                 style={{
                     marginBottom: "25px",
                     padding: "12px",
@@ -22,23 +50,26 @@ export default function Documents() {
                 }}
             />
 
-            <Row xs={1} sm={2} md={3} lg={3} className="g-4">
-                {assignmentsData.map((assignment, index) => {
-                    const isVisible = assignment.name.toLowerCase().includes(search.toLowerCase());
+            <Row
+                className="g-4 justify-content-center"
+                style={{ minHeight: "500px" }}
+            >
+                {currentAssignments.map((assignment) => {
+                    const originalIndex = assignmentsData.indexOf(assignment);
 
                     return (
-                        <Col key={index}>
+                        <Col
+                            key={originalIndex}
+                            style={{ flex: `0 0 ${cardWidth}px` }}
+                        >
                             <Card
-                                onClick={() => isVisible && navigate(`/documents/${index}`)}
+                                onClick={() => navigate(`/documents/${originalIndex}`)}
                                 style={{
-                                    cursor: isVisible ? "pointer" : "default",
+                                    cursor: "pointer",
                                     borderRadius: "15px",
                                     padding: "10px",
                                     minHeight: "150px",
-                                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                                    opacity: isVisible ? 1 : 0,     
-                                    visibility: isVisible ? "visible" : "hidden",
-                                    pointerEvents: isVisible ? "auto" : "none"
+                                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
                                 }}
                             >
                                 <Card.Body>
@@ -53,6 +84,20 @@ export default function Documents() {
                     );
                 })}
             </Row>
+
+            {totalPages > 1 && (
+                <Pagination className="justify-content-center mt-4">
+                    <Pagination.Prev
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                    />
+                    {paginationItems}
+                    <Pagination.Next
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                    />
+                </Pagination>
+            )}
         </Container>
     );
 }
