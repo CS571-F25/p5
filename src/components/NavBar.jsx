@@ -6,7 +6,7 @@ export default function NavBar() {
         <Navbar
             bg="white"
             className="shadow-sm mb-4"
-            style={{ padding: "0.75rem 1rem", margin: 12 }}
+            style={{ padding: "0.75rem 1rem", margin: 12, borderRadius: 12 }}
         >
             <Container className="d-flex justify-content-center">
                 <Nav className="d-flex gap-4">
