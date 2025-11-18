@@ -46,6 +46,37 @@ export default function Home(props) {
                         setAssignments(prev => {
                             const originalIndex = assignments.indexOf(assignment);
                             const updated = [...prev];
+                            const oldStatus = updated[originalIndex].status;
+
+                            const today = new Date();
+                            const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, "0")}/${today.getDate().toString().padStart(2, "0")}/${(today.getFullYear())}/`;
+
+                            if (oldStatus === "todo" && newStatus === "in-progress") {
+                                updated[originalIndex].startdate = formattedDate;
+                            }
+
+                            if (oldStatus === "in-progress" && newStatus === "done") {
+                                updated[originalIndex].enddate = formattedDate;
+                            }
+
+                            if (oldStatus === "todo" && newStatus === "done") {
+                                updated[originalIndex].startdate = formattedDate;
+                                updated[originalIndex].enddate = formattedDate;
+                            }
+
+                            if (oldStatus === "in-progress" && newStatus === "todo") {
+                                updated[originalIndex].startdate = "";
+                            }
+
+                            if (oldStatus === "done" && newStatus === "in-progress") {
+                                updated[originalIndex].enddate = "";
+                            }
+
+                            if (oldStatus === "done" && newStatus === "todo") {
+                                updated[originalIndex].startdate = "";
+                                updated[originalIndex].enddate = "";
+                            }
+
                             updated[originalIndex].status = newStatus;
                             return updated;
                         });
