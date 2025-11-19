@@ -4,7 +4,6 @@ import assignmentsData from "../data/assignmentsData";
 import AssignmentBar from "../components/AssignmentBar";
 import NotesPanel from "../components/NotesPanel";
 import AddAssigmentModal from "../components/AddAssignmentModal";
-import PageContainer from "../components/PageContainer";
 
 export default function Home(props) {
     // hard-coded values that will be fetched actually
@@ -36,13 +35,13 @@ export default function Home(props) {
     }
     const sortedAssignments = statusOrder.map(status => assignments.filter(a => a.status === status).sort((a, b) => formatDate(a.duedate) - formatDate(b.duedate))).flat();
 
-    return <PageContainer>
-        <div style={{ marginTop: "20px", width: "100%" }}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <h1>Hello {name}!</h1>
-                <Button variant="primary" onClick={() => setShowModal(true)}>Create Assignment</Button>
-            </div>
-            <Stack gap={3}>
+    return <div style={{ marginTop: "20px", width: "100%"}}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <h1>Hello {name}!</h1>
+            <Button variant="primary" onClick={() => setShowModal(true)}>Create Assignment</Button>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", width: "100%"}}>
+            <Stack gap={3} style={{ width: "600px", maxWidth: "90%"}}>
                 {sortedAssignments.map((assignment, index) => (
                     <AssignmentBar key={index} {...assignment}
                         onStatusChange={(newStatus) => {
@@ -91,17 +90,17 @@ export default function Home(props) {
                     />
                 ))}
             </Stack>
-
-            {openNotes != null && (
-                <NotesPanel
-                    assignment={assignments[openNotes]}
-                    onClose={handleCloseNotes}
-                    onNotesChange={handleNotesChange}
-                    fullScreen={false}
-                />
-            )}
-
-            <AddAssigmentModal show={showModal} onClose={() => setShowModal(false)} onSubmit={handleAddAssignment} />
         </div>
-    </PageContainer >
+
+        {openNotes != null && (
+            <NotesPanel
+                assignment={assignments[openNotes]}
+                onClose={handleCloseNotes}
+                onNotesChange={handleNotesChange}
+                fullScreen={false}
+            />
+        )}
+
+        <AddAssigmentModal show={showModal} onClose={() => setShowModal(false)} onSubmit={handleAddAssignment} />
+    </div>
 }
