@@ -37,9 +37,11 @@ export default function Home(props) {
     const sortedAssignments = statusOrder.map(status => assignments.filter(a => a.status === status).sort((a, b) => formatDate(a.duedate) - formatDate(b.duedate))).flat();
 
     return <PageContainer>
-        <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-            <h1>Hello {name}!</h1>
-            <Button variant="primary" onClick={() => setShowModal(true)}>Create Assignment</Button>
+        <div style={{ marginTop: "20px", width: "100%" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <h1>Hello {name}!</h1>
+                <Button variant="primary" onClick={() => setShowModal(true)}>Create Assignment</Button>
+            </div>
             <Stack gap={3}>
                 {sortedAssignments.map((assignment, index) => (
                     <AssignmentBar key={index} {...assignment}
