@@ -3,12 +3,9 @@ import { LinkContainer } from "react-router-bootstrap";
 
 export default function NavBar() {
     return (
-        <Navbar
-            bg="white"
-            className="shadow-sm mb-4"
-            style={{ padding: "0.75rem 1rem", margin: 12, borderRadius: 12 }}
-        >
-            <Container className="d-flex justify-content-center">
+         <Navbar bg="white" sticky="top" className="shadow-sm site-navbar" >
+        
+            <Container className="justify-content-center">
                 <Nav className="d-flex gap-4">
 
                     <LinkContainer to="/">

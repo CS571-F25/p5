@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Card, Container, Row, Col, Form, Pagination } from "react-bootstrap";
+import { Card, Row, Col, Form, Pagination } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import assignmentsData from "../data/assignmentsData";
+import PageContainer from "../components/PageContainer";
 
 export default function Documents() {
     const [search, setSearch] = useState("");
@@ -10,7 +11,7 @@ export default function Documents() {
 
     const cardsPerPage = 9;
     const cardWidth = 300;
-    
+
     const filtered = assignmentsData.filter(a =>
         a.name.toLowerCase().includes(search.toLowerCase())
     );
@@ -22,82 +23,70 @@ export default function Documents() {
     const paginationItems = [];
     for (let number = 1; number <= totalPages; number++) {
         paginationItems.push(
-            <Pagination.Item
-                key={number}
-                active={number === currentPage}
-                onClick={() => setCurrentPage(number)}
-            >
+            <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
                 {number}
             </Pagination.Item>
         );
     }
 
     return (
-        <Container style={{ marginTop: "20px" }}>
-            <Form.Control
-                type="text"
-                placeholder="Search assignments..."
-                value={search}
-                onChange={(e) => {
-                    setSearch(e.target.value);
-                    setCurrentPage(1);
-                }}
-                style={{
-                    marginBottom: "25px",
-                    padding: "12px",
-                    borderRadius: "12px",
-                    fontSize: "16px"
-                }}
-            />
+        <PageContainer>
+            <div style={{ marginTop: "20px" }}>
+                <Form.Control
+                    type="text"
+                    placeholder="Search assignments..."
+                    value={search}
+                    onChange={(e) => {
+                        setSearch(e.target.value);
+                        setCurrentPage(1);
+                    }}
+                    style={{
+                        marginBottom: "25px",
+                        padding: "12px",
+                        borderRadius: "12px",
+                        fontSize: "16px"
+                    }}
+                />
 
-            <Row
-                className="g-4 justify-content-center"
-                style={{ minHeight: "500px" }}
-            >
-                {currentAssignments.map((assignment) => {
-                    const originalIndex = assignmentsData.indexOf(assignment);
+                <Row className="g-4 justify-content-center" style={{ minHeight: "500px" }}>
+                    {currentAssignments.map((assignment) => {
+                        const originalIndex = assignmentsData.indexOf(assignment);
 
-                    return (
-                        <Col
-                            key={originalIndex}
-                            style={{ flex: `0 0 ${cardWidth}px` }}
-                        >
-                            <Card
-                                onClick={() => navigate(`/documents/${originalIndex}`)}
-                                style={{
-                                    cursor: "pointer",
-                                    borderRadius: "15px",
-                                    padding: "10px",
-                                    minHeight: "150px",
-                                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
-                                }}
-                            >
-                                <Card.Body>
-                                    <Card.Title className="fw-bold">{assignment.name}</Card.Title>
-                                    <Card.Text>
-                                        <strong>Subject:</strong> {assignment.subject} <br />
-                                        <strong>Due:</strong> {assignment.duedate}
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    );
-                })}
-            </Row>
+                        return (
+                            <Col key={originalIndex} xs={12} sm={6} md={4} lg={3} className="d-flex justify-content-center">
+                                <Card
+                                    onClick={() => navigate(`/documents/${originalIndex}`)}
+                                    style={{
+                                        cursor: "pointer",
+                                        borderRadius: "15px",
+                                        padding: "10px",
+                                        minHeight: "150px",
+                                        boxShadow: "0 2px 8px black)",
+                                        width: `${cardWidth}px`,
+                                        maxWidth: "100%"
+                                    }}
+                                >
+                                    <Card.Body>
+                                        <Card.Title className="fw-bold">{assignment.name}</Card.Title>
+                                        <Card.Text>
+                                            <strong>Subject:</strong> {assignment.subject} <br />
+                                            <strong>Due:</strong> {assignment.duedate}
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        );
+                    })}
+                </Row>
 
-            {totalPages > 1 && (
-                <Pagination className="justify-content-center mt-4">
-                    <Pagination.Prev
-                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                        disabled={currentPage === 1}
-                    />
-                    {paginationItems}
-                    <Pagination.Next
-                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                        disabled={currentPage === totalPages}
-                    />
-                </Pagination>
-            )}
-        </Container>
+                {totalPages > 1 && (
+                    <Pagination className="justify-content-center mt-4">
+                        <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
+                        {paginationItems}
+                        <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
+                    </Pagination>
+                )}
+            </div>
+        </PageContainer>
     );
 }

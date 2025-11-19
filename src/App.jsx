@@ -9,11 +9,13 @@ import NotesPage from "./pages/NotesPage"
 export default function App() {
   return <HashRouter>
     <NavBar />
-    <Routes>
-      <Route path="/" element={<Home />}></Route>
-      <Route path="/documents" element={<Documents />}></Route>
-      <Route path="/documents/:id" element={<NotesPage />} />
-      <Route path="/statistics" element={<Statistics />}></Route>
-    </Routes>
+    <div>
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/documents" element={<Documents />}></Route>
+        <Route path="/documents/:id" element={<NotesPage />} />
+        <Route path="/statistics" element={<Statistics />}></Route>
+      </Routes>
+    </div>
   </HashRouter>
 }

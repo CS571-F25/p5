@@ -11,7 +11,7 @@ const styles = {
         backgroundColor: "white",
         boxShadow: "-2px 0 8px rgba(0,0,0,0.2)",
         padding: "20px",
-        zIndex: 1000,
+        zIndex: 1050,
         display: "flex",
         flexDirection: "column"
     },
@@ -30,13 +30,14 @@ const styles = {
     },
     textarea: {
         width: "100%",
-        height: "100%",
+        flexGrow: 1,
         resize: "none",
         borderRadius: "8px",
         border: "1px solid #ccc",
-        color: "white",
+        color: "black",
         padding: "10px",
-        fontSize: "15px"
+        fontSize: "15px",
+        marginTop: "10px"
     },
     subjectButton: {
         border: "none",
@@ -78,7 +79,7 @@ export default function NotesPanel(props) {
         ...styles.panel,
         width: props.fullScreen ? "100vw" : "800px",
         left: props.fullScreen ? 0 : "auto",
-        right: props.fullScreen ? 0 : 0,
+        right: props.fullScreen ? 0 : 0
     };
 
     const textareaStyle = {
