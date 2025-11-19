@@ -1,6 +1,6 @@
 import React from "react";
-import { Card, Stack } from "react-bootstrap";
 import assignmentsData from "../data/assignmentsData";
+import NextAssignmentCard from "../components/nextAssignmentCard";
 
 export default function Statistics() {
     const statusOrder = ["in-progress", "todo", "done"];
@@ -41,26 +41,7 @@ export default function Statistics() {
         <h1>Statistics!</h1>
 
         {nextAssignment ? (
-            <Card
-                style={{
-                    width: "100%",
-                    maxWidth: "500px",
-                    marginTop: "20px",
-                    textAlign: "center",
-                    padding: "20px",
-                    borderRadius: "15px",
-                    boxShadow: "0 2px 8px lightgray",
-                }}
-            >
-                <Card.Body>
-                    <Card.Title>Your next assignment is:</Card.Title>
-                    <Card.Text>
-                        <strong>{nextAssignment.name}</strong>
-                        <br />
-                        Due: {nextAssignment.duedate}
-                    </Card.Text>
-                </Card.Body>
-            </Card>
+            <NextAssignmentCard {...nextAssignment} />
         ) : (
             <p>No upcoming assignments!</p>
         )}

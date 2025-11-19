@@ -7,7 +7,10 @@ import DocumentCard from "../components/DocumentCard";
 const styles = {
     container: {
         padding: "10px",
-        marginTop: "20px"
+        marginTop: "20px",
+        width: "90%",
+        marginLeft: "auto",
+        marginRight: "auto"
     }
 }
 

@@ -41,7 +41,7 @@ export default function Home(props) {
             <Button variant="primary" onClick={() => setShowModal(true)}>Create Assignment</Button>
         </div>
         <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", width: "100%"}}>
-            <Stack gap={3} style={{ width: "600px", maxWidth: "90%"}}>
+            <Stack gap={3} style={{ width: "600px", maxWidth: "90%" }}>
                 {sortedAssignments.map((assignment, index) => (
                     <AssignmentBar key={index} {...assignment}
                         onStatusChange={(newStatus) => {
