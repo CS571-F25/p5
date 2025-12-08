@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#Index stuff
+docs/assets/
+docs/*.js
+docs/*.css

@@ -1,18 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Form, Pagination } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import assignmentsData from "../data/assignmentsData";
-import PageContainer from "../components/PageContainer";
+import DocumentCard from "../components/DocumentCard";
+
+const styles = {
+    container: {
+        padding: "10px",
+        marginTop: "20px",
+        width: "90%",
+        marginLeft: "auto",
+        marginRight: "auto"
+    }
+}
 
 export default function Documents() {
+    const [assignments, setAssignments] = useState([]);
+    useEffect(() => {
+        fetch("https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments", {
+            method: "GET",
+            headers: {
+                "X-CS571-ID": CS571.getBadgerId()
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.results);
+            setAssignments(Object.entries(data.results).map(([id, assignment]) => ({id, ...assignment})));
+        })
+    }, []);
+
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const navigate = useNavigate();
 
-    const cardsPerPage = 9;
-    const cardWidth = 300;
+    const cardsPerPage = 12;
 
-    const filtered = assignmentsData.filter(a =>
+    const filtered = assignments.filter(a =>
         a.name.toLowerCase().includes(search.toLowerCase())
     );
 
@@ -22,71 +44,40 @@ export default function Documents() {
 
     const paginationItems = [];
     for (let number = 1; number <= totalPages; number++) {
-        paginationItems.push(
-            <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
-                {number}
-            </Pagination.Item>
-        );
+        paginationItems.push( <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}> {number} </Pagination.Item> );
     }
 
-    return (
-        <PageContainer>
-            <div style={{ marginTop: "20px" }}>
-                <Form.Control
-                    type="text"
-                    placeholder="Search assignments..."
-                    value={search}
-                    onChange={(e) => {
-                        setSearch(e.target.value);
-                        setCurrentPage(1);
-                    }}
-                    style={{
-                        marginBottom: "25px",
-                        padding: "12px",
-                        borderRadius: "12px",
-                        fontSize: "16px"
-                    }}
-                />
+    return <div style={styles.container}>
+        <Form.Control
+            type="text"
+            placeholder="Search assignments..."
+            value={search}
+            onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1);
+            }}
+            style={{
+                marginBottom: "25px",
+                padding: "12px",
+                borderRadius: "12px",
+                fontSize: "16px"
+            }}
+        />
 
-                <Row className="g-4 justify-content-center" style={{ minHeight: "500px" }}>
-                    {currentAssignments.map((assignment) => {
-                        const originalIndex = assignmentsData.indexOf(assignment);
+        <Row className="g-4 justify-content-center" style={{ minHeight: "500px" }}>
+            {currentAssignments.map((assignment) => {
+                const originalIndex = assignments.indexOf(assignment);
 
-                        return (
-                            <Col key={originalIndex} xs={12} sm={6} md={4} lg={3} className="d-flex justify-content-center">
-                                <Card
-                                    onClick={() => navigate(`/documents/${originalIndex}`)}
-                                    style={{
-                                        cursor: "pointer",
-                                        borderRadius: "15px",
-                                        padding: "10px",
-                                        minHeight: "150px",
-                                        boxShadow: "0 2px 8px black)",
-                                        width: `${cardWidth}px`,
-                                        maxWidth: "100%"
-                                    }}
-                                >
-                                    <Card.Body>
-                                        <Card.Title className="fw-bold">{assignment.name}</Card.Title>
-                                        <Card.Text>
-                                            <strong>Subject:</strong> {assignment.subject} <br />
-                                            <strong>Due:</strong> {assignment.duedate}
-                                        </Card.Text>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        );
-                    })}
-                </Row>
+                return <DocumentCard key={originalIndex} {...assignment} index={originalIndex}/>
+            })}
+        </Row>
 
-                {totalPages > 1 && (
-                    <Pagination className="justify-content-center mt-4">
-                        <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
-                        {paginationItems}
-                        <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
-                    </Pagination>
-                )}
-            </div>
-        </PageContainer>
-    );
+        {totalPages > 1 && (
+            <Pagination className="justify-content-center mt-4">
+                <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
+                {paginationItems}
+                <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
+            </Pagination>
+        )}
+    </div>
 }

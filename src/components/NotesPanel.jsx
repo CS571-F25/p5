@@ -1,5 +1,5 @@
-import React from "react";
-import { Stack } from "react-bootstrap";
+import React, { useState, useEffect, useRef } from "react";
+import { Button, Stack } from "react-bootstrap";
 
 const styles = {
     panel: {
@@ -37,7 +37,8 @@ const styles = {
         color: "black",
         padding: "10px",
         fontSize: "15px",
-        marginTop: "10px"
+        marginTop: "10px",
+        marginBottom: "10px"
     },
     subjectButton: {
         border: "none",
@@ -59,7 +60,7 @@ const styles = {
         cursor: "default",
         fontWeight: "500"
     },
-    statusDropdown: {
+    statusButton: {
         border: "none",
         backgroundColor: "#e5e5e5",
         padding: "10px 16px",
@@ -75,6 +76,40 @@ const styles = {
 };
 
 export default function NotesPanel(props) {
+    const [localNotes, setLocalNotes] = useState(props.assignment.notes);
+    const [isSaving, setIsSaving] = useState(false);
+    const saveTimeout = useRef(null);
+
+    useEffect(() => {
+        setLocalNotes(props.assignment.notes);
+    }, [props.assignment]);
+
+    useEffect(() => {
+        if (saveTimeout.current) {
+            clearTimeout(saveTimeout.current);
+        }
+
+        saveTimeout.current = setTimeout(() => {
+            if(localNotes !== props.assignment.notes) {
+                props.onSaveNotes(localNotes);
+            }
+        }, 10000);
+
+        return () => clearTimeout(saveTimeout.current);
+    }, [localNotes]);
+
+    const handleSave = async (notesToSave) => {
+        if (notesToSave === props.assignment.notes) return;
+        
+        setIsSaving(true);
+        await props.onSaveNotes(notesToSave);
+        setIsSaving(false);
+    };
+
+    let saveButtonText = "Save Notes";
+    if(isSaving) saveButtonText = "Saving...";
+    else if (localNotes === props.assignment.notes) saveButtonText = "Saved!";
+
     const panelStyle = {
         ...styles.panel,
         width: props.fullScreen ? "100vw" : "800px",
@@ -96,19 +131,21 @@ export default function NotesPanel(props) {
             <Stack direction="horizontal" gap={3} style={styles.subheading}>
                 <button style={styles.subjectButton}>{props.assignment.subject}</button>
                 <button style={styles.dateButton}>{props.assignment.duedate}</button>
-                <select value={props.assignment.status} style={styles.statusDropdown}>
-                    <option value="todo">To Do</option>
-                    <option value="in-progress">In Progress</option>
-                    <option value="done">Done</option>
-                </select>
+                <button style={{...styles.statusButton}}>{props.assignment.status === "todo" ? "To Do" : props.assignment.status === "in-progress" ? "In Progress" : "Done"}</button>
             </Stack>
 
             <textarea
                 style={textareaStyle}
-                value={props.assignment.notes}
-                onChange={(e) => props.onNotesChange(e.target.value)}
+                value={localNotes}
+                onChange={(e) => setLocalNotes(e.target.value)}
                 placeholder="Write your notes here..."
             />
+
+            <Button style={{margingTop: "15px", alignSelf: "flex-end" }} 
+                onClick={() => handleSave(localNotes)}
+                disabled={isSaving || localNotes === props.assignment.notes}>
+                {saveButtonText}
+            </Button>
         </div>
     );
 }

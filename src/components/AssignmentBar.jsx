@@ -64,6 +64,17 @@ const statusColors = {
     "done": { background: "#c9f7d7", color: "#1e7a44" }
 };
 
+const formatForInput = (date) => {
+    if(!date) return "";
+    const [month, day, year] = date.split("/");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+}
+
+const formatForAPI = (date) => {
+    const [year, month, day] = date.split("-");
+    return `${month}/${day}/${year}`;
+}
+
 export default function AssignmentBar(props) {
 
     const currentColor = statusColors[props.status] || {
@@ -83,7 +94,7 @@ export default function AssignmentBar(props) {
             <div style={styles.subject}>{props.subject}</div>
         </div>
 
-        <Button style={styles.dateButton}>{props.duedate}</Button>
+        <input type="date" value={formatForInput(props.duedate)} style={styles.dateButton} onChange={e => props.onDateChange(formatForAPI(e.target.value))} />
         <Button style={styles.notesButton} onClick={props.onNotesClick}>Notes</Button>
 
         <select value={props.status} style={dropdownStyle} onChange={(e) => props.onStatusChange(e.target.value)}>

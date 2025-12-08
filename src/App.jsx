@@ -3,7 +3,7 @@ import "./App.css";
 import Home from "./pages/Home";
 import Documents from "./pages/Documents";
 import Statistics from "./pages/Statistics";
-import NavBar from "./components/NavBar";
+import NavBar from "./navigation/NavBar";
 import NotesPage from "./pages/NotesPage"
 
 export default function App() {

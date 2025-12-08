@@ -8,7 +8,8 @@ export default function AddAssigmentModal({ show, onClose, onSubmit }) {
         subject: "",
         duedate: "",
         status: "todo",
-        notes: ""
+        notes: "",
+        enddate: ""
     });
 
     useEffect(() => {
@@ -18,14 +19,35 @@ export default function AddAssigmentModal({ show, onClose, onSubmit }) {
                 subject: "",
                 duedate: "",
                 status: "todo",
-                notes: ""
+                notes: "",
+                enddate: ""
             });
         }
     }, [show]);
 
-    const handleSubmit = () => {
-        onSubmit({...newAssignment, duedate: formatDate(newAssignment.duedate)});
-        onClose();
+    const handleSubmit = async () => {
+        const assignmentData = {...newAssignment, duedate: formatDate(newAssignment.duedate)};
+
+        try {
+            const res = await fetch("https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CS571-ID": CS571.getBadgerId()
+                },
+                body: JSON.stringify(assignmentData)
+            });
+
+            if(!res.ok) {
+                throw new Error("Failed to add assignment");
+            }
+
+            onSubmit();
+            onClose();
+        } catch (err) {
+            console.log(err);
+            alert("Error adding assignment!")
+        }
     }
 
     const formatDate = (date) => {

@@ -1,6 +1,5 @@
-import { Card, Stack } from "react-bootstrap";
 import assignmentsData from "../data/assignmentsData";
-import PageContainer from "../components/PageContainer";
+import NextAssignmentCard from "../components/nextAssignmentCard";
 import StatCard from "../components/StatCard";
 import StatPieChart from "../components/StatPieChart";
 
@@ -14,7 +13,7 @@ export default function Statistics() {
         return new Date(`${year}-${month}-${day}`);
     };
 
-    //sorting status, then due date
+    //sorting
     const sortedAssignments = statusOrder
         .map((status) =>
             assignmentsData
@@ -33,7 +32,6 @@ export default function Statistics() {
 
     //summary stats
     const totalAssignments = assignmentsData.length;
-
     const completedAssignments = assignmentsData.filter(
         (a) => a.status === "done"
     ).length;
@@ -48,7 +46,7 @@ export default function Statistics() {
         return due < today && a.status !== "done";
     }).length;
 
-    //breaking down study time
+    //data for amount of itme studied 
     const studyTimeByCourse = {};
     assignmentsData.forEach((a) => {
         if (!a.course || !a.studyTime) return;
@@ -57,73 +55,51 @@ export default function Statistics() {
     });
 
     const pieChartData = Object.entries(studyTimeByCourse).map(
-        ([course, time]) => ({
-            course,
-            time,
-        })
+        ([course, time]) => ({ course, time })
     );
 
     return (
-        <PageContainer>
+        <div
+            style={{
+                marginTop: "20px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "100%",
+            }}
+        >
+            <h1>Statistics!</h1>
+
+            {nextAssignment ? (
+                <NextAssignmentCard {...nextAssignment} />
+            ) : (
+                <p>No upcoming assignments!</p>
+            )}
+
             <div
                 style={{
-                    marginTop: "20px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
+                    marginTop: "40px",
                     width: "100%",
+                    maxWidth: "900px",
+                    display: "flex",
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                    gap: "20px",
                 }}
             >
-                <h1>Statistics</h1>
-
-                {nextAssignment ? (
-                    <Card
-                        style={{
-                            width: "100%",
-                            maxWidth: "500px",
-                            marginTop: "20px",
-                            textAlign: "center",
-                            padding: "20px",
-                            borderRadius: "15px",
-                            boxShadow: "0 2px 8px lightgray",
-                        }}
-                    >
-                        <Card.Body>
-                            <Card.Title>Your next assignment is:</Card.Title>
-                            <Card.Text>
-                                <strong>{nextAssignment.name}</strong>
-                                <br />
-                                Due: {nextAssignment.duedate}
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                ) : (
-                    <p>No upcoming assignments!</p>
-                )}
-
-                <div
-                    style={{
-                        marginTop: "40px",
-                        width: "100%",
-                        maxWidth: "900px",
-                        display: "flex",
-                        justifyContent: "center",
-                        flexWrap: "wrap",
-                        gap: "20px"
-                    }}
-                >
-                    <StatCard title="Total Assignments" value={totalAssignments} />
-                    <StatCard title="Completed" value={completedAssignments} />
-                    <StatCard title="Due This Week" value={assignmentsDueThisWeek} />
-                    <StatCard title="Overdue" value={overdueAssignments} />
-                </div>
-
-                {pieChartData.length > 0 ? (
-                    <StatPieChart data={pieChartData} />
-                ) : (
-                    <p style={{ marginTop: "40px" }}> Sorry, you haven't studied anything yet! </p>
-                )}
+                <StatCard title="Total Assignments" value={totalAssignments} />
+                <StatCard title="Completed" value={completedAssignments} />
+                <StatCard title="Due This Week" value={assignmentsDueThisWeek} />
+                <StatCard title="Overdue" value={overdueAssignments} />
             </div>
-        </PageContainer>
+
+            {pieChartData.length > 0 ? (
+                <StatPieChart data={pieChartData} />
+            ) : (
+                <p style={{ marginTop: "40px" }}>
+                    Sorry, you haven't studied anything yet!
+                </p>
+            )}
+        </div>
     );
 }
