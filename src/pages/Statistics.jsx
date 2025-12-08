@@ -1,23 +1,41 @@
-import assignmentsData from "../data/assignmentsData";
-import NextAssignmentCard from "../components/nextAssignmentCard";
+import React, { useState, useEffect } from "react";
+import NextAssignmentCard from "../components/NextAssignmentCard";
 import StatCard from "../components/StatCard";
-import StatPieChart from "../components/StatPieChart";
 
 export default function Statistics() {
+    const [assignments, setAssignments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [countdown, setCountdown] = useState("");
+
     const statusOrder = ["in-progress", "todo", "done"];
 
     const formatDate = (date) => {
         if (!date) return new Date(0);
-        const parts = date.replace(/\/$/, "").split("/");
-        const [month, day, year] = parts;
+        const [month, day, year] = date.replace(/\/$/, "").split("/");
         return new Date(`${year}-${month}-${day}`);
     };
 
-    //sorting
+    useEffect(() => {
+        fetch("https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments", {
+            method: "GET",
+            headers: { "X-CS571-ID": CS571.getBadgerId() },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                const assignmentsArray = Object.entries(data.results).map(([id, a]) => ({
+                    id,
+                    ...a,
+                }));
+                setAssignments(assignmentsArray);
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
+    }, []);
+
     const sortedAssignments = statusOrder
         .map((status) =>
-            assignmentsData
-                .filter((a) => a.status === status)
+            assignments
+                .filter((a) => a && a.status === status)
                 .sort((a, b) => formatDate(a.duedate) - formatDate(b.duedate))
         )
         .flat();
@@ -30,33 +48,59 @@ export default function Statistics() {
     const nextWeek = new Date();
     nextWeek.setDate(today.getDate() + 7);
 
-    //summary stats
-    const totalAssignments = assignmentsData.length;
-    const completedAssignments = assignmentsData.filter(
-        (a) => a.status === "done"
-    ).length;
-
-    const assignmentsDueThisWeek = assignmentsData.filter((a) => {
+    const totalAssignments = assignments.length;
+    const completedAssignments = assignments.filter((a) => a.status === "done").length;
+    const assignmentsDueThisWeek = assignments.filter((a) => {
         const due = formatDate(a.duedate);
         return due >= today && due <= nextWeek && a.status !== "done";
     }).length;
-
-    const overdueAssignments = assignmentsData.filter((a) => {
+    const overdueAssignments = assignments.filter((a) => {
         const due = formatDate(a.duedate);
         return due < today && a.status !== "done";
     }).length;
 
-    //data for amount of itme studied 
-    const studyTimeByCourse = {};
-    assignmentsData.forEach((a) => {
-        if (!a.course || !a.studyTime) return;
-        if (!studyTimeByCourse[a.course]) studyTimeByCourse[a.course] = 0;
-        studyTimeByCourse[a.course] += a.studyTime;
-    });
+    useEffect(() => {
+        if (!nextAssignment) return;
 
-    const pieChartData = Object.entries(studyTimeByCourse).map(
-        ([course, time]) => ({ course, time })
-    );
+        const interval = setInterval(() => {
+            const now = new Date();
+            const due = formatDate(nextAssignment.duedate);
+            const diff = due - now;
+
+            if (diff <= 0) {
+                setCountdown("Due today!");
+                clearInterval(interval);
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [nextAssignment]);
+
+    if (loading) {
+        return (
+            <div style={{ marginTop: "20px", textAlign: "center" }}>
+                <h1>Statistics</h1>
+                <p>Loading assignments...</p>
+            </div>
+        );
+    }
+
+    if (!assignments || assignments.length === 0) {
+        return (
+            <div style={{ marginTop: "20px", textAlign: "center" }}>
+                <h1>Statistics</h1>
+                <p>No assignments available.</p>
+            </div>
+        );
+    }
 
     return (
         <div
@@ -68,10 +112,14 @@ export default function Statistics() {
                 width: "100%",
             }}
         >
-            <h1>Statistics!</h1>
+            <h1>Statistics</h1>
 
             {nextAssignment ? (
-                <NextAssignmentCard {...nextAssignment} />
+                <NextAssignmentCard {...nextAssignment}>
+                    <p style={{ marginTop: "10px" }}>
+                        Countdown: <strong>{countdown}</strong>
+                    </p>
+                </NextAssignmentCard>
             ) : (
                 <p>No upcoming assignments!</p>
             )}
@@ -92,14 +140,6 @@ export default function Statistics() {
                 <StatCard title="Due This Week" value={assignmentsDueThisWeek} />
                 <StatCard title="Overdue" value={overdueAssignments} />
             </div>
-
-            {pieChartData.length > 0 ? (
-                <StatPieChart data={pieChartData} />
-            ) : (
-                <p style={{ marginTop: "40px" }}>
-                    Sorry, you haven't studied anything yet!
-                </p>
-            )}
         </div>
     );
 }

@@ -47,6 +47,8 @@ export default function Documents() {
         paginationItems.push( <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}> {number} </Pagination.Item> );
     }
 
+    console.log(assignments);
+    
     return <div style={styles.container}>
         <Form.Control
             type="text"

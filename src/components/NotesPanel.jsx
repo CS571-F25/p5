@@ -26,7 +26,10 @@ const styles = {
     title: {
         fontSize: "22px",
         fontWeight: "bold",
-        marginBottom: "10px"
+        marginBottom: "10px",
+        textAlign: "center",
+        width: "100%",
+        marginBottom: "24px"
     },
     textarea: {
         width: "100%",
@@ -90,7 +93,7 @@ export default function NotesPanel(props) {
         }
 
         saveTimeout.current = setTimeout(() => {
-            if(localNotes !== props.assignment.notes) {
+            if (localNotes !== props.assignment.notes) {
                 props.onSaveNotes(localNotes);
             }
         }, 10000);
@@ -100,14 +103,14 @@ export default function NotesPanel(props) {
 
     const handleSave = async (notesToSave) => {
         if (notesToSave === props.assignment.notes) return;
-        
+
         setIsSaving(true);
         await props.onSaveNotes(notesToSave);
         setIsSaving(false);
     };
 
     let saveButtonText = "Save Notes";
-    if(isSaving) saveButtonText = "Saving...";
+    if (isSaving) saveButtonText = "Saving...";
     else if (localNotes === props.assignment.notes) saveButtonText = "Saved!";
 
     const panelStyle = {
@@ -131,7 +134,7 @@ export default function NotesPanel(props) {
             <Stack direction="horizontal" gap={3} style={styles.subheading}>
                 <button style={styles.subjectButton}>{props.assignment.subject}</button>
                 <button style={styles.dateButton}>{props.assignment.duedate}</button>
-                <button style={{...styles.statusButton}}>{props.assignment.status === "todo" ? "To Do" : props.assignment.status === "in-progress" ? "In Progress" : "Done"}</button>
+                <button style={{ ...styles.statusButton }}>{props.assignment.status === "todo" ? "To Do" : props.assignment.status === "in-progress" ? "In Progress" : "Done"}</button>
             </Stack>
 
             <textarea
@@ -141,7 +144,7 @@ export default function NotesPanel(props) {
                 placeholder="Write your notes here..."
             />
 
-            <Button style={{margingTop: "15px", alignSelf: "flex-end" }} 
+            <Button style={{ margingTop: "15px", alignSelf: "flex-end" }}
                 onClick={() => handleSave(localNotes)}
                 disabled={isSaving || localNotes === props.assignment.notes}>
                 {saveButtonText}
