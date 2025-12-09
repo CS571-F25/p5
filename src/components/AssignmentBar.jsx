@@ -45,8 +45,8 @@ export default function AssignmentBar(props) {
                     </Col>
 
                     <Col xs="auto">
-                        <Dropdown onSelect={(key) => onStatusChange(key)}>
-                            <Dropdown.Toggle style={{ backgroundColor: currentColor.background, color: currentColor.color, border: "none", fontWeight: 500, fontSize: "0.85rem" }} className="rounded-pill">{currentColor.label}</Dropdown.Toggle>
+                        <Dropdown onSelect={(key) => props.onStatusChange(key)}>
+                            <Dropdown.Toggle style={{ backgroundColor: currentColor.background, color: currentColor.color, border: "none" }} className="rounded-pill">{currentColor.label}</Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item key="todo" eventKey="todo" style={{ color: statusChoices["todo"].color}}>To Do</Dropdown.Item>
                                 <Dropdown.Item key="in-progress" eventKey="in-progress" style={{ color: statusChoices["in-progress"].color}}>In Progress</Dropdown.Item>
