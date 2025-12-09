@@ -27,3 +27,4 @@ dist-ssr
 docs/assets/
 docs/*.js
 docs/*.css
+index.html
