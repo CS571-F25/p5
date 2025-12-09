@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Stack } from "react-bootstrap";
+import { Container, Row, Col, Button, Stack, Form } from "react-bootstrap";
 import AssignmentBar from "../components/AssignmentBar";
 import NotesPanel from "../components/NotesPanel";
 import AddAssigmentModal from "../components/AddAssignmentModal";
@@ -10,6 +10,11 @@ export default function Home() {
     const [openNotes, setOpenNotes] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [studyTimeStart, setStudyTimeStart] = useState(null);
+
+    const [searchTitle, setSearchTitle] = useState("");
+    const [filterSubject, setFilterSubject] = useState("");
+    const [filterStatus, setFilterStatus] = useState("");
+    const [filterDate, setFilterDate] = useState("");
 
     // Fetch assignments
     useEffect(() => {
@@ -102,6 +107,20 @@ export default function Home() {
 
     const handleReload = () => setReload((prev) => prev + 1);
 
+    // Filter assignments
+    const filteredAssignments = assignments.filter(a => {
+        const matchesTitle = !searchTitle || a.name.toLowerCase().includes(searchTitle.toLowerCase());
+        const matchesSubject = !filterSubject || a.subject === filterSubject;
+        const matchesStatus = !filterStatus || a.status === filterStatus;
+        const matchesDate = !filterDate || (() => {
+            const [year, month, day] = filterDate.split("-");
+            const formattedDate = `${month}/${day}/${year}`;
+            return a.duedate === formattedDate;
+        })();
+
+        return matchesTitle && matchesSubject && matchesStatus && matchesDate;
+    });
+
     // Sort assignments
     const statusOrder = ["in-progress", "todo", "done"];
     const formatDate = (date) => {
@@ -109,36 +128,64 @@ export default function Home() {
         const [month, day, year] = date.split("/");
         return new Date(`${year}-${month}-${day}`);
     };
+
     const sortedAssignments = statusOrder
         .map((status) =>
-            assignments
+            filteredAssignments
                 .filter((a) => a && a.status === status)
                 .sort((a, b) => formatDate(a.duedate) - formatDate(b.duedate))
         )
         .flat();
 
-    return (
-        <div style={{ marginTop: "20px", paddingBottom: "20px", width: "100%" }}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <h1>Hello!</h1>
-                <Button variant="primary" onClick={() => setShowModal(true)}>
-                    Create Assignment
-                </Button>
-            </div>
+    const uniqueSubjects = [...new Set(assignments.map(a => a.subject?.trim()).filter(s => s && s.length > 0))].sort();
 
-            <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", width: "100%" }}>
-                <Stack gap={3} style={{ width: "600px", maxWidth: "90%" }}>
-                    {sortedAssignments.map((assignment, index) => (
-                        <AssignmentBar
-                            key={index}
-                            {...assignment}
-                            onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
-                            onDateChange={(newDate) => handleDateChange(assignment, newDate)}
-                            onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
-                        />
-                    ))}
-                </Stack>
-            </div>
+    return (
+        <Container className="mt-4 pb-4">
+            <Row className="text-center mb-4">
+                <Col>
+                    <h1>Hello!</h1>
+                    <Button variant="primary" style={{ backgroundColor: "#d4edda", color: "#155724", border: "none" }} className="rounded-pill" onClick={() => setShowModal(true)}>Create Assignment</Button>
+                </Col>
+            </Row>
+
+            <Row className="justify-content-center mb-4">
+                <Col lg="6" xs="3">
+                    <Form.Control type="text" placeholder="Search Assignments" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
+                </Col>
+                <Col lg="2" xs="3">
+                <Form.Control type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
+                </Col>
+                <Col lg="2" xs="3">
+                    <Form.Select value={filterSubject} onChange={(e) => setFilterSubject(e.target.value)}>
+                        <option value="">Any Subject</option>
+                        {uniqueSubjects.map(subject => <option key={subject} value={subject}>{subject}</option>)}
+                    </Form.Select>
+                </Col>
+                <Col lg="2" xs="3">
+                    <Form.Select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                        <option value="">Any Status</option>
+                        <option value="todo">To Do</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="done">Done</option>
+                    </Form.Select>
+                </Col>
+            </Row>
+
+            <Row className="justify-content-center">
+                <Col xs={12}>
+                    <Stack gap={3}>
+                        {sortedAssignments.map((assignment, index) => (
+                            <AssignmentBar
+                                key={index}
+                                {...assignment}
+                                onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
+                                onDateChange={(newDate) => handleDateChange(assignment, newDate)}
+                                onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
+                            />
+                        ))}
+                    </Stack>
+                </Col>
+            </Row>
 
             {openNotes != null && (
                 <NotesPanel
@@ -150,6 +197,6 @@ export default function Home() {
             )}
 
             <AddAssigmentModal show={showModal} onClose={() => setShowModal(false)} onSubmit={handleReload} />
-        </div>
+        </Container>
     );
 }

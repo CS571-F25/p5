@@ -52,18 +52,14 @@ export default function Documents() {
     return <div style={styles.container}>
         <Form.Control
             type="text"
-            placeholder="Search assignments..."
+            placeholder="Search documents..."
             value={search}
             onChange={(e) => {
                 setSearch(e.target.value);
                 setCurrentPage(1);
             }}
-            style={{
-                marginBottom: "25px",
-                padding: "12px",
-                borderRadius: "12px",
-                fontSize: "16px"
-            }}
+            xs={12}
+            className="mb-3"
         />
 
         <Row className="g-4 justify-content-center" style={{ minHeight: "500px" }}>

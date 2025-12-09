@@ -74,12 +74,12 @@ export default function AddAssigmentModal({ show, onClose, onSubmit }) {
                 <Form.Group className="mt-3">
                     <Form.Label>Due Date</Form.Label>
                     <Form.Control type="date" value={newAssignment.duedate} onChange={(e) => setNewAssignment({...newAssignment, duedate: e.target.value})} />
-                </Form.Group>                    
+                </Form.Group>
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="secondary" onClick={onClose}>Cancel</Button>
-            <Button variant="primary" onClick={handleSubmit}>Add Assignment</Button>
+            <Button variant="secondary"  style={{ backgroundColor: "#e0e0e0", color: "#6c757d", border: "none" }} className="rounded-pill" onClick={onClose}>Cancel</Button>
+            <Button variant="primary"  style={{ backgroundColor: "#d4edda", color: "#155724", border: "none" }} className="rounded-pill" onClick={handleSubmit}>Add Assignment</Button>
         </Modal.Footer>
     </Modal>
 }
