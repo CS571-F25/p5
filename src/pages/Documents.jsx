@@ -12,17 +12,25 @@ export default function Documents() {
                 "X-CS571-ID": CS571.getBadgerId()
             }
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data.results);
-            setAssignments(Object.entries(data.results).map(([id, assignment]) => ({id, ...assignment})));
-        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data.results);
+                setAssignments(Object.entries(data.results).map(([id, assignment]) => ({ id, ...assignment })));
+            })
     }, []);
 
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
     const cardsPerPage = 12;
+
+    const handleSaveNotes = (id, newNotes) => {
+        setAssignments(prev =>
+            prev.map(a =>
+                a.id === id ? { ...a, notes: newNotes } : a
+            )
+        );
+    };
 
     const filtered = assignments.filter(a =>
         a.name.toLowerCase().includes(search.toLowerCase())
@@ -34,11 +42,11 @@ export default function Documents() {
 
     const paginationItems = [];
     for (let number = 1; number <= totalPages; number++) {
-        paginationItems.push( <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}> {number} </Pagination.Item> );
+        paginationItems.push(<Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}> {number} </Pagination.Item>);
     }
 
     console.log(assignments);
-    
+
     return <Container className="mt-4 pb-4">
         <Form.Control
             type="text"
@@ -56,7 +64,7 @@ export default function Documents() {
             {currentAssignments.map((assignment) => {
                 const originalIndex = assignments.indexOf(assignment);
 
-                return <DocumentCard key={originalIndex} {...assignment} index={originalIndex}/>
+                return <DocumentCard key={originalIndex} {...assignment} index={originalIndex} />
             })}
         </Row>
 

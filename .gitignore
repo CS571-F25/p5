@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -24,7 +26,6 @@ dist-ssr
 *.sw?
 
 #Index stuff
-docs/assets/
 docs/*.js
 docs/*.css
 index.html

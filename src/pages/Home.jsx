@@ -23,7 +23,7 @@ export default function Home() {
     });
 
     const toggleAccordion = (section) => {
-        setAccordionOpen(prev => ({...prev, [section]: !prev[section]}));
+        setAccordionOpen(prev => ({ ...prev, [section]: !prev[section] }));
     };
 
     // Fetch assignments
@@ -180,7 +180,7 @@ export default function Home() {
                     <Form.Control type="text" placeholder="Search Assignments" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
                 </Col>
                 <Col lg="2" xs="3">
-                <Form.Control type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
+                    <Form.Control type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
                 </Col>
                 <Col lg="2" xs="3">
                     <Form.Select value={filterSubject} onChange={(e) => setFilterSubject(e.target.value)}>
@@ -259,7 +259,7 @@ export default function Home() {
                 <NotesPanel
                     assignment={assignments[openNotes]}
                     onClose={handleCloseNotes}
-                    onSaveNotes={handleSaveNotes}
+                    onSaveNotes={(newNotes) => handleSaveNotes(assignments[openNotes].id, newNotes)}
                     fullScreen={false}
                 />
             )}
