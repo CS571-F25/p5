@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Form, Pagination } from "react-bootstrap";
+import { Container, Card, Row, Col, Form, Pagination } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import DocumentCard from "../components/DocumentCard";
-
-const styles = {
-    container: {
-        padding: "10px",
-        marginTop: "20px",
-        width: "90%",
-        marginLeft: "auto",
-        marginRight: "auto"
-    }
-}
 
 export default function Documents() {
     const [assignments, setAssignments] = useState([]);
@@ -49,7 +39,7 @@ export default function Documents() {
 
     console.log(assignments);
     
-    return <div style={styles.container}>
+    return <Container className="mt-4 pb-4">
         <Form.Control
             type="text"
             placeholder="Search documents..."
@@ -77,5 +67,5 @@ export default function Documents() {
                 <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
             </Pagination>
         )}
-    </div>
+    </Container>
 }
