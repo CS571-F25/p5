@@ -81,8 +81,6 @@ export default function Statistics() {
 
     return (
         <Container className="mt-4">
-            <h1 className=" justify-content-center text-center mb-4">Statistics</h1>
-
             {nextAssignment && (
                 <Row className="justify-content-center mb-2" style={{ maxWidth: "500px", margin: "0 auto" }}>
                     <Col xs={12}>
