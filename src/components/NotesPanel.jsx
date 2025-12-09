@@ -139,11 +139,7 @@ export default function NotesPanel({ assignment, onSaveNotes, onClose, fullScree
                 placeholder="Write your notes here..."
             />
 
-            <Button
-                style={{ marginTop: "15px", alignSelf: "flex-end" }}
-                onClick={() => handleSave(localNotes)}
-                disabled={isSaving || localNotes === lastSavedNotes}
-            >
+            <Button variant="primary" style={{ backgroundColor: "#d4edda", color: "#155724", border: "none" }} className="rounded-pill" onClick={() => handleSave(localNotes)} disabled={isSaving || localNotes === lastSavedNotes}>
                 {saveButtonText}
             </Button>
         </div>
