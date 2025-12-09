@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import NextAssignmentCard from "../components/NextAssignmentCard";
 import StatCard from "../components/StatCard";
 
@@ -86,60 +87,62 @@ export default function Statistics() {
 
     if (loading) {
         return (
-            <div style={{ marginTop: "20px", textAlign: "center" }}>
+            <Container className="text-center mt-5">
                 <h1>Statistics</h1>
-                <p>Loading assignments...</p>
-            </div>
+                <Spinner animation="border" role="status" className="mt-3">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </Container>
         );
     }
 
     if (!assignments || assignments.length === 0) {
         return (
-            <div style={{ marginTop: "20px", textAlign: "center" }}>
+            <Container className="text-center mt-5">
                 <h1>Statistics</h1>
                 <p>No assignments available.</p>
-            </div>
+            </Container>
         );
     }
 
     return (
-        <div
-            style={{
-                marginTop: "20px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                width: "100%",
-            }}
-        >
-            <h1>Statistics</h1>
+        <Container className="mt-4">
+            <h1 className="text-center mb-4">Statistics</h1>
 
             {nextAssignment ? (
-                <NextAssignmentCard {...nextAssignment}>
-                    <p style={{ marginTop: "10px" }}>
-                        Countdown: <strong>{countdown}</strong>
-                    </p>
-                </NextAssignmentCard>
+                <Row
+                    className="justify-content-center mb-4"
+                    style={{ maxWidth: "500px", margin: "0 auto" }}
+                >
+                    <Col xs={12}>
+                        <NextAssignmentCard {...nextAssignment}>
+                            <p className="mt-2 text-center">
+                                Countdown: <strong>{countdown}</strong>
+                            </p>
+                        </NextAssignmentCard>
+                    </Col>
+                </Row>
             ) : (
-                <p>No upcoming assignments!</p>
+                <p className="text-center">No upcoming assignments!</p>
             )}
 
-            <div
-                style={{
-                    marginTop: "40px",
-                    width: "100%",
-                    maxWidth: "900px",
-                    display: "flex",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                    gap: "20px",
-                }}
+            <Row
+                className="gx-3 gy-3 justify-content-center"
+                style={{ maxWidth: "1200px", margin: "0 auto" }}
             >
-                <StatCard title="Total Assignments" value={totalAssignments} />
-                <StatCard title="Completed" value={completedAssignments} />
-                <StatCard title="Due This Week" value={assignmentsDueThisWeek} />
-                <StatCard title="Overdue" value={overdueAssignments} />
-            </div>
-        </div>
+                <Col xs={12} sm={6} md={3}>
+                    <StatCard title="Total Assignments" value={totalAssignments} />
+                </Col>
+                <Col xs={12} sm={6} md={3}>
+                    <StatCard title="Due This Week" value={assignmentsDueThisWeek} />
+                </Col>
+                <Col xs={12} sm={6} md={3}>
+                    <StatCard title="Completed" value={completedAssignments} />
+                </Col>
+                <Col xs={12} sm={6} md={3}>
+                    <StatCard title="Overdue" value={overdueAssignments} />
+                </Col>
+            </Row>
+        </Container>
     );
 }
