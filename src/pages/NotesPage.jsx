@@ -9,6 +9,8 @@ export default function NotesPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const savedNotes = localStorage.getItem(`notes-${id}`);
+
         fetch("https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments", {
             method: "GET",
             headers: { "X-CS571-ID": CS571.getBadgerId() },
@@ -19,22 +21,37 @@ export default function NotesPage() {
                     ([key, a]) => ({ id: key, ...a })
                 );
                 const found = assignmentsArray.find(a => a.id.toString() === id.toString());
-                setAssignment(found || null);
+
+                if (!found) {
+                    setAssignment(null);
+                } else {
+                    setAssignment({
+                        ...found,
+                        notes: savedNotes ?? found.notes ?? ""
+                    });
+                }
+
                 setLoading(false);
             });
     }, [id]);
 
-    const handleNotesChange = (text) => {
+    const handleSaveNotes = (text) => {
         setAssignment(prev => ({ ...prev, notes: text }));
+        localStorage.setItem(`notes-${id}`, text);
     };
 
-    if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>Loading assignment...</p>;
-    if (!assignment) return <p style={{ textAlign: "center", marginTop: "50px" }}>Assignment not found.</p>;
+    if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>
+        Loading assignment...
+    </p>;
+
+    if (!assignment) return <p style={{ textAlign: "center", marginTop: "50px" }}>
+        Assignment not found.
+    </p>;
 
     return (
         <NotesPanel
             assignment={assignment}
-            onNotesChange={handleNotesChange}
+            onSaveNotes={handleSaveNotes}
             onClose={() => navigate("/documents")}
             fullScreen={true}
         />

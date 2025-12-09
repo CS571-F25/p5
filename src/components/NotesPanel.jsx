@@ -18,7 +18,7 @@ const styles = {
     closeButton: {
         alignSelf: "flex-end",
         border: "none",
-        fontSize: "20px",
+        fontSize: "24px",
         background: "none",
         cursor: "pointer",
         color: "black"
@@ -26,9 +26,7 @@ const styles = {
     title: {
         fontSize: "22px",
         fontWeight: "bold",
-        marginBottom: "10px",
         textAlign: "center",
-        width: "100%",
         marginBottom: "24px"
     },
     textarea: {
@@ -37,11 +35,10 @@ const styles = {
         resize: "none",
         borderRadius: "8px",
         border: "1px solid #ccc",
-        color: "black",
         padding: "10px",
         fontSize: "15px",
-        marginTop: "10px",
-        marginBottom: "10px"
+        marginBottom: "10px",
+        color: "black"
     },
     subjectButton: {
         border: "none",
@@ -51,7 +48,7 @@ const styles = {
         borderRadius: "20px",
         marginRight: "12px",
         cursor: "default",
-        fontWeight: "500"
+        fontWeight: 500
     },
     dateButton: {
         border: "none",
@@ -61,16 +58,16 @@ const styles = {
         borderRadius: "20px",
         marginRight: "12px",
         cursor: "default",
-        fontWeight: "500"
+        fontWeight: 500
     },
     statusButton: {
         border: "none",
         backgroundColor: "#e5e5e5",
+        color: "#333",
         padding: "10px 16px",
         borderRadius: "20px",
         cursor: "pointer",
-        fontWeight: "500",
-        color: "#333"
+        fontWeight: 500
     },
     subheading: {
         alignSelf: "center",
@@ -78,75 +75,75 @@ const styles = {
     }
 };
 
-export default function NotesPanel(props) {
-    const [localNotes, setLocalNotes] = useState(props.assignment.notes);
+export default function NotesPanel({ assignment, onSaveNotes, onClose, fullScreen }) {
+    const [localNotes, setLocalNotes] = useState(assignment.notes);
+    const [lastSavedNotes, setLastSavedNotes] = useState(assignment.notes);
     const [isSaving, setIsSaving] = useState(false);
     const saveTimeout = useRef(null);
 
     useEffect(() => {
-        setLocalNotes(props.assignment.notes);
-    }, [props.assignment]);
+        if (localNotes === undefined) {
+            setLocalNotes(assignment.notes);
+        }
+    }, [assignment.id]);
+
 
     useEffect(() => {
-        if (saveTimeout.current) {
-            clearTimeout(saveTimeout.current);
-        }
+        if (saveTimeout.current) clearTimeout(saveTimeout.current);
 
         saveTimeout.current = setTimeout(() => {
-            if (localNotes !== props.assignment.notes) {
-                props.onSaveNotes(localNotes);
+            if (localNotes !== lastSavedNotes) {
+                handleSave(localNotes);
             }
         }, 10000);
 
         return () => clearTimeout(saveTimeout.current);
-    }, [localNotes]);
+    }, [localNotes, lastSavedNotes]);
 
     const handleSave = async (notesToSave) => {
-        if (notesToSave === props.assignment.notes) return;
-
+        if (!onSaveNotes) return;
         setIsSaving(true);
-        await props.onSaveNotes(notesToSave);
+        await onSaveNotes(notesToSave);
         setIsSaving(false);
+        setLastSavedNotes(notesToSave);
     };
 
-    let saveButtonText = "Save Notes";
+    let saveButtonText = "Save";
     if (isSaving) saveButtonText = "Saving...";
-    else if (localNotes === props.assignment.notes) saveButtonText = "Saved!";
+    else if (localNotes !== lastSavedNotes) saveButtonText = "Save";
+    else saveButtonText = "Saved!";
 
-    const panelStyle = {
-        ...styles.panel,
-        width: props.fullScreen ? "100vw" : "800px",
-        left: props.fullScreen ? 0 : "auto",
-        right: props.fullScreen ? 0 : 0
-    };
-
-    const textareaStyle = {
-        ...styles.textarea,
-        flexGrow: 1
-    };
+    const panelStyle = fullScreen
+        ? { ...styles.panel, width: "100vw", left: 0, right: 0, top: 0, height: "100vh" }
+        : styles.panel;
 
     return (
         <div style={panelStyle}>
-            <button style={styles.closeButton} onClick={props.onClose}>×</button>
+            <button style={styles.closeButton} onClick={onClose}>×</button>
 
-            <div style={styles.title}>{props.assignment.name}</div>
+            <div style={styles.title}>{assignment.name}</div>
 
             <Stack direction="horizontal" gap={3} style={styles.subheading}>
-                <button style={styles.subjectButton}>{props.assignment.subject}</button>
-                <button style={styles.dateButton}>{props.assignment.duedate}</button>
-                <button style={{ ...styles.statusButton }}>{props.assignment.status === "todo" ? "To Do" : props.assignment.status === "in-progress" ? "In Progress" : "Done"}</button>
+                <button style={styles.subjectButton}>{assignment.subject}</button>
+                <button style={styles.dateButton}>{assignment.duedate}</button>
+                <button style={styles.statusButton}>
+                    {assignment.status === "todo" ? "To Do" :
+                        assignment.status === "in-progress" ? "In Progress" : "Done"}
+                </button>
             </Stack>
 
             <textarea
-                style={textareaStyle}
+                style={styles.textarea}
                 value={localNotes}
                 onChange={(e) => setLocalNotes(e.target.value)}
                 placeholder="Write your notes here..."
             />
 
-            <Button style={{ margingTop: "15px", alignSelf: "flex-end" }}
+            <Button
+                style={{ marginTop: "15px", alignSelf: "flex-end" }}
                 onClick={() => handleSave(localNotes)}
-                disabled={isSaving || localNotes === props.assignment.notes}>
+                disabled={isSaving || localNotes === lastSavedNotes}
+            >
                 {saveButtonText}
             </Button>
         </div>
