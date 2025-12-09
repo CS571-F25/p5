@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Button, Stack, Form } from "react-bootstrap";
+import { Badge, Container, Row, Col, Button, Stack, Form } from "react-bootstrap";
 import AssignmentBar from "../components/AssignmentBar";
 import NotesPanel from "../components/NotesPanel";
 import AddAssigmentModal from "../components/AddAssignmentModal";
@@ -15,6 +15,16 @@ export default function Home() {
     const [filterSubject, setFilterSubject] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
     const [filterDate, setFilterDate] = useState("");
+
+    const [accordionOpen, setAccordionOpen] = useState({
+        "in-progress": true,
+        "todo": true,
+        "done": false
+    });
+
+    const toggleAccordion = (section) => {
+        setAccordionOpen(prev => ({...prev, [section]: !prev[section]}));
+    };
 
     // Fetch assignments
     useEffect(() => {
@@ -101,9 +111,20 @@ export default function Home() {
         fetch(`https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments?id=${assignment.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", "X-CS571-ID": CS571.getBadgerId() },
-            body: JSON.stringify(updatedAssignment),
+            body: JSON.stringify(updatedAssignment)
         }).then(() => handleReload());
     };
+
+    const handleDelete = (assignment) => {
+        const confirmDelete = window.confirm(`Deleting "${assignment.name}" will also delete its notes! Are you sure?`);
+
+        if (!confirmDelete) return;
+
+        fetch(`https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments?id=${assignment.id}`, {
+            method: "DELETE",
+            headers: { "X-CS571-ID": CS571.getBadgerId() }
+        }).then(() => handleReload());
+    }
 
     const handleReload = () => setReload((prev) => prev + 1);
 
@@ -136,6 +157,12 @@ export default function Home() {
                 .sort((a, b) => formatDate(a.duedate) - formatDate(b.duedate))
         )
         .flat();
+
+    const groupedAssignments = {
+        "in-progress": sortedAssignments.filter(a => a.status === "in-progress"),
+        "todo": sortedAssignments.filter(a => a.status === "todo"),
+        "done": sortedAssignments.filter(a => a.status === "done"),
+    }
 
     const uniqueSubjects = [...new Set(assignments.map(a => a.subject?.trim()).filter(s => s && s.length > 0))].sort();
 
@@ -171,21 +198,62 @@ export default function Home() {
                 </Col>
             </Row>
 
-            <Row className="justify-content-center">
-                <Col xs={12}>
-                    <Stack gap={3}>
-                        {sortedAssignments.map((assignment, index) => (
-                            <AssignmentBar
-                                key={index}
-                                {...assignment}
-                                onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
-                                onDateChange={(newDate) => handleDateChange(assignment, newDate)}
-                                onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
-                            />
-                        ))}
-                    </Stack>
-                </Col>
-            </Row>
+            <Container onClick={() => toggleAccordion("in-progress")} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
+                {accordionOpen["in-progress"] ? "▼" : "▶"} In Progress <span className="text-muted" style={{ fontWeight: "normal" }}>({groupedAssignments["in-progress"].length})</span>
+            </Container>
+            {accordionOpen["in-progress"] && (
+                <Stack gap={3} className="mb-3">
+                    {groupedAssignments["in-progress"].map((assignment) => (
+                        <AssignmentBar
+                            key={assignment.id}
+                            {...assignment}
+                            onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
+                            onDateChange={(newDate) => handleDateChange(assignment, newDate)}
+                            onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
+                            onDelete={() => handleDelete(assignment)}
+                        />
+                    ))}
+                    {groupedAssignments["in-progress"].length === 0 && <Container className="text-muted">No assignments in progress!</Container>}
+                </Stack>
+            )}
+
+            <Container onClick={() => toggleAccordion("todo")} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
+                {accordionOpen["todo"] ? "▼" : "▶"} To Do <span className="text-muted" style={{ fontWeight: "normal" }}>({groupedAssignments["todo"].length})</span>
+            </Container>
+            {accordionOpen["todo"] && (
+                <Stack gap={3} className="mb-3">
+                    {groupedAssignments["todo"].map((assignment) => (
+                        <AssignmentBar
+                            key={assignment.id}
+                            {...assignment}
+                            onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
+                            onDateChange={(newDate) => handleDateChange(assignment, newDate)}
+                            onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
+                            onDelete={() => handleDelete(assignment)}
+                        />
+                    ))}
+                    {groupedAssignments["todo"].length === 0 && <Container className="text-muted">No assignments to do!</Container>}
+                </Stack>
+            )}
+
+            <Container onClick={() => toggleAccordion("done")} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
+                {accordionOpen["done"] ? "▼" : "▶"} Done <span className="text-muted" style={{ fontWeight: "normal" }}>({groupedAssignments["done"].length})</span>
+            </Container>
+            {accordionOpen["done"] && (
+                <Stack gap={3} className="mb-3">
+                    {groupedAssignments["done"].map((assignment) => (
+                        <AssignmentBar
+                            key={assignment.id}
+                            {...assignment}
+                            onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
+                            onDateChange={(newDate) => handleDateChange(assignment, newDate)}
+                            onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
+                            onDelete={() => handleDelete(assignment)}
+                        />
+                    ))}
+                    {groupedAssignments["done"].length === 0 && <Container className="text-muted">No assignments done yet!</Container>}
+                </Stack>
+            )}
 
             {openNotes != null && (
                 <NotesPanel

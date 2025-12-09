@@ -54,6 +54,10 @@ export default function AssignmentBar(props) {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col>
+
+                    <Col xs="auto">
+                        <Button variant="danger" className="rounded-pill" style={{ backgroundColor: "#e0e0e0", color: "#6c757d", border: "none" }} onClick={props.onDelete}>✕</Button>
+                    </Col>
                 </Row>
             </Card.Body>
         </Card>
