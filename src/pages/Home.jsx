@@ -101,9 +101,20 @@ export default function Home() {
         fetch(`https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments?id=${assignment.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", "X-CS571-ID": CS571.getBadgerId() },
-            body: JSON.stringify(updatedAssignment),
+            body: JSON.stringify(updatedAssignment)
         }).then(() => handleReload());
     };
+
+    const handleDelete = (assignment) => {
+        const confirmDelete = window.confirm(`Deleting "${assignment.name}" will also delete its notes! Are you sure?`);
+
+        if (!confirmDelete) return;
+
+        fetch(`https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments?id=${assignment.id}`, {
+            method: "DELETE",
+            headers: { "X-CS571-ID": CS571.getBadgerId() }
+        }).then(() => handleReload());
+    }
 
     const handleReload = () => setReload((prev) => prev + 1);
 
@@ -181,6 +192,7 @@ export default function Home() {
                                 onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
                                 onDateChange={(newDate) => handleDateChange(assignment, newDate)}
                                 onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
+                                onDelete={() => handleDelete(assignment)}
                             />
                         ))}
                     </Stack>
