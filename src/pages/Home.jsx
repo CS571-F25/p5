@@ -177,18 +177,18 @@ export default function Home() {
 
             <Row className="justify-content-center mb-4">
                 <Col lg="6" xs="3">
-                    <Form.Group controlId="Search Assigments">
-                        <Form.Control type="text" placeholder="Search Assignments" id="Search Assignemnts" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
+                    <Form.Group controlId="Search Assignments">
+                        <Form.Control type="text" placeholder="Search Assignments" id="Search Assignemnts" aria-label="Search Assignments" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
                     </Form.Group>
                 </Col>
                 <Col lg="2" xs="3">
                     <Form.Group controlId="Date">
-                        <Form.Control type="date" value={filterDate} id="date" onChange={(e) => setFilterDate(e.target.value)} />
+                        <Form.Control type="date" value={filterDate} id="date" aria-label="date" onChange={(e) => setFilterDate(e.target.value)} />
                     </Form.Group>
                 </Col>
                 <Col lg="2" xs="3">
                     <Form.Group controlId="filter subjects">
-                        <Form.Select value={filterSubject} id="filterSubject" onChange={(e) => setFilterSubject(e.target.value)}>
+                        <Form.Select value={filterSubject} id="filterSubject" aria-label="filter subjects" onChange={(e) => setFilterSubject(e.target.value)}>
                             <option value="">Any Subject</option>
                             {uniqueSubjects.map(subject => <option key={subject} value={subject}>{subject}</option>)}
                         </Form.Select>
@@ -196,7 +196,7 @@ export default function Home() {
                 </Col>
                 <Col lg="2" xs="3">
                     <Form.Group controlId="filter status">
-                        <Form.Select value={filterStatus} id="filterStatus" onChange={(e) => setFilterStatus(e.target.value)}>
+                        <Form.Select value={filterStatus} id="filterStatus"  aria-label="filter status" onChange={(e) => setFilterStatus(e.target.value)}>
                             <option value="">Any Status</option>
                             <option value="todo">To Do</option>
                             <option value="in-progress">In Progress</option>

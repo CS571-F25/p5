@@ -46,6 +46,7 @@ export default function Documents() {
                 type="text"
                 placeholder="Search documents..."
                 value={search}
+                aria-label="Search documents"
                 onChange={(e) => {
                     setSearch(e.target.value);
                     setCurrentPage(1);

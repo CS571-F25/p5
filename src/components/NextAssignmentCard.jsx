@@ -19,7 +19,11 @@ export default function NextAssignmentCard(props) {
 
     return <Row className="justify-content-center mb-2" style={{ maxWidth: "500px", margin: "0 auto" }}>
         <Col xs={12}>
-            <Card className="mt-3" >
+            <Card className="mt-3"
+                style={{
+                    backgroundColor: "#d0e8ff",
+                    color: "#005089ff"
+                }}>
                 <Card.Body className="text-center">
                     <Card.Title>Your next assignment is:</Card.Title>
                     <Card.Text>
