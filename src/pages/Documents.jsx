@@ -19,13 +19,16 @@ export default function Documents() {
     }, []);
 
     const [search, setSearch] = useState("");
+    const [filter, setFilter] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
     const cardsPerPage = 12;
 
-    const filtered = assignments.filter(a =>
-        a.name.toLowerCase().includes(search.toLowerCase())
-    );
+    const filtered = assignments.filter(a => {
+        const searchMatch = a.name.toLowerCase().includes(search.toLowerCase());
+        const filterMatch = !filter || a.subject === filter;
+        return searchMatch && filterMatch;
+    });
 
     const totalPages = Math.ceil(filtered.length / cardsPerPage);
     const startIndex = (currentPage - 1) * cardsPerPage;
@@ -36,21 +39,22 @@ export default function Documents() {
         paginationItems.push(<Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}> {number} </Pagination.Item>);
     }
 
+    const uniqueSubjects = [...new Set(assignments.map(a => a.subject?.trim()).filter(s => s && s.length > 0))].sort();
+
     return <Container className="mt-4 pb-4">
         
         <Form.Group controlId="searchInput">
-            <Form.Control
-                type="text"
-                placeholder="Search documents..."
-                value={search}
-                aria-label="Search documents"
-                onChange={(e) => {
-                    setSearch(e.target.value);
-                    setCurrentPage(1);
-                }}
-                xs={12}
-                className="mb-3"
-            />
+            <Row>
+                <Col lg="9" xs="8">
+                    <Form.Control type="text" placeholder="Search documents" value={search} aria-label="Search documents" onChange={(e) => {setSearch(e.target.value); setCurrentPage(1);}} className="mb-3" />
+                </Col>
+                <Col lg="3" xs="4">
+                    <Form.Select value={filter} onChange={(e) => setFilter(e.target.value)}>
+                        <option value="">Any Subject</option>
+                        {uniqueSubjects.map(subject => <option key={subject} value={subject}>{subject}</option>)}
+                    </Form.Select>
+                </Col>
+            </Row>
         </Form.Group>
 
         <Row className="g-4 justify-content-center" style={{ minHeight: "500px" }}>
