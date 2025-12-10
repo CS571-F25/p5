@@ -10,7 +10,7 @@ export default function NotesPage() {
     const [reload, setReload] = useState(0);
 
     useEffect(() => {
-        const savedNotes = localStorage.getItem(`notes-${id}`);
+        const savedNotes = localStorage.getItem(`assignment_notes_${id}`);
 
         fetch("https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments", {
             method: "GET",
