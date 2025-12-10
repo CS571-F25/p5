@@ -14,7 +14,6 @@ export default function Home() {
 
     const [searchTitle, setSearchTitle] = useState("");
     const [filterSubject, setFilterSubject] = useState("");
-    const [filterStatus, setFilterStatus] = useState("");
     const [filterDate, setFilterDate] = useState("");
 
     const [accordionOpen, setAccordionOpen] = useState({
@@ -135,14 +134,13 @@ export default function Home() {
     const filteredAssignments = assignments.filter(a => {
         const matchesTitle = !searchTitle || a.name.toLowerCase().includes(searchTitle.toLowerCase());
         const matchesSubject = !filterSubject || a.subject === filterSubject;
-        const matchesStatus = !filterStatus || a.status === filterStatus;
         const matchesDate = !filterDate || (() => {
             const [year, month, day] = filterDate.split("-");
             const formattedDate = `${month}/${day}/${year}`;
             return a.duedate === formattedDate;
         })();
 
-        return matchesTitle && matchesSubject && matchesStatus && matchesDate;
+        return matchesTitle && matchesSubject && matchesDate;
     });
 
     // Sort assignments
@@ -189,24 +187,16 @@ export default function Home() {
             </Row>
 
             <Row className="justify-content-center mb-4">
-                <Col lg="6" xs="3">
+                <Col lg="6" xs="4">
                     <Form.Control type="text" placeholder="Search Assignments" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
                 </Col>
-                <Col lg="2" xs="3">
+                <Col lg="3" xs="4">
                 <Form.Control type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
                 </Col>
-                <Col lg="2" xs="3">
+                <Col lg="3" xs="4">
                     <Form.Select value={filterSubject} onChange={(e) => setFilterSubject(e.target.value)}>
                         <option value="">Any Subject</option>
                         {uniqueSubjects.map(subject => <option key={subject} value={subject}>{subject}</option>)}
-                    </Form.Select>
-                </Col>
-                <Col lg="2" xs="3">
-                    <Form.Select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-                        <option value="">Any Status</option>
-                        <option value="todo">To Do</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="done">Done</option>
                     </Form.Select>
                 </Col>
             </Row>
