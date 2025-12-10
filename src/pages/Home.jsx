@@ -195,7 +195,7 @@ export default function Home() {
                     </Form.Group>
                 </Col>
                 <Col lg="2" xs="3">
-                    <Form.Group controlId="filter subjects">
+                    <Form.Group controlId="filter status">
                         <Form.Select value={filterStatus} id="filterStatus" onChange={(e) => setFilterStatus(e.target.value)}>
                             <option value="">Any Status</option>
                             <option value="todo">To Do</option>

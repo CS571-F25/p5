@@ -42,7 +42,6 @@ export default function Documents() {
 
     return <Container className="mt-4 pb-4">
         <Form.Group controlId="searchInput">
-            <Form.Label>Search documents...</Form.Label>
             <Form.Control
                 type="text"
                 placeholder="Search documents..."
