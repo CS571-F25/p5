@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Button, Container, Row, Col } from "react-bootstrap";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
+
+const statusStyling = {
+    "todo": { background: "#e8d9ff", color: "#5e3a8c", label: "To Do" },
+    "in-progress": { background: "#ffd4d4", color: "#b32424", label: "In Progress" },
+    "done": { background: "#c9f7d7", color: "#1e7a44", label: "Done" }
+};
 
 export default function AssignmentCalendar(props) {
     const [selectedDate, setSelectedDate] = useState(null);
 
     const formatDate = (date) => {
         if (!date) return new Date(0);
-        const [month, day, year] = date.replace(/\/$/, "").split("/");
+        const [month, day, year] = date.split("/");
         return new Date(`${year}-${month}-${day}`);
     };
 
@@ -18,17 +24,17 @@ export default function AssignmentCalendar(props) {
             return (
                 due.getFullYear() === selectedDate.getFullYear() &&
                 due.getMonth() === selectedDate.getMonth() &&
-                due.getDate() === selectedDate.getDate()
+                due.getDate() === selectedDate.getDate() - 1
             );
         })
         : [];
 
     return <>
         <Row className="gx-3 gy-3 justify-content-center mb-3">
-            <Col xs={12} md={8}>
-                <div className="p-3 shadow-sm rounded mt-3"
-                    style={{ textAlign: "center", backgroundColor: "#ffe8c2", color: "#a36200",  border: "1px solid #f7c77fff"}}>
-                    <h4 className="mb-3">Assignment Calendar</h4>
+            <Col>
+                <div className="p-3 shadow-sm rounded mt-3 border"
+                    style={{ textAlign: "center" }}>
+                    <h4 className="mb-3">Select a Date</h4>
                     <Calendar
                         onClickDay={(date) => setSelectedDate(date)}
                         value={selectedDate}
@@ -40,24 +46,22 @@ export default function AssignmentCalendar(props) {
 
         {selectedDate && (
             <Row className="mt-4 justify-content-center">
-                <Col xs={12} md={8}>
-                    <div className="p-3 rounded shadow-sm" 
-                    style={{
-                        background: "#e8d9ff",
-                        color: "#5e3a8c",
-                        border: "1px solid #c89dffff"
-                    }}>
+                <Col>
+                    <div className="p-3 rounded shadow-sm border">
                         <h4 className="text-center mb-3">
                             Assignments Due on {selectedDate.toLocaleDateString()}
                         </h4>
                         {assignmentsOnSelectedDate.length === 0 ? (
-                            <p className="text-center text-muted" color="#5e3a8c">No assignments due on this day.</p>
+                            <p className="text-center text-muted">No assignments due on this day.</p>
                         ) : (
                             <ul className="list-group">
                                 {assignmentsOnSelectedDate.map(a => (
                                     <li key={a.id} className="list-group-item d-flex justify-content-between">
-                                        <span>{a.name}</span>
-                                        <span>{a.duedate}</span>
+                                        <Col className="d-flex align-items-center">
+                                            {a.name}
+                                        </Col>
+                                        <Button variant="secondary" className="rounded-pill me-3" style={{ backgroundColor: "#ffe8c2", color: "#a36200", border: "none" }}>{a.subject}</Button>
+                                        <Button variant="secondary" className="rounded-pill" style={{ backgroundColor: statusStyling[a.status].background, color: statusStyling[a.status].color, border: "none" }}>{a.status === "todo" ? "To Do" : a.status === "in-progress" ? "In Progress" : "Done"}</Button>
                                     </li>
                                 ))}
                             </ul>

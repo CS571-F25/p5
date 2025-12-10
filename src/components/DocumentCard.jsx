@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, Row, Col } from "react-bootstrap";
+import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export default function DocumentCard(props) {
@@ -10,7 +10,7 @@ export default function DocumentCard(props) {
             <Card onClick={() => navigate(`/documents/${props.id}`)} className="shadow-sm rounded-2 w-100">
                 <Card.Body className="p-3 justify-content-center text-center">
                     <Card.Title className="fw-bold pb-2">{props.name}</Card.Title>
-                    <Card.Text className="mb-0">
+                    <Container className="mb-0">
                         <Row className="align-items-center mb-0 gap-1">
                             <Col>
                                 <Button variant="primary" className="rounded-pill" style={{ backgroundColor: "#d0e8ff", color: "#005fa3", border: "none" }}>{props.duedate}</Button>
@@ -19,7 +19,7 @@ export default function DocumentCard(props) {
                                 <Button variant="secondary" className="rounded-pill" style={{ backgroundColor: "#ffe8c2", color: "#a36200", border: "none" }}>{props.subject}</Button>
                             </Col>
                         </Row>
-                    </Card.Text>
+                    </Container>
                 </Card.Body>
             </Card>
         </Col>

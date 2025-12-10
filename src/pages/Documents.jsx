@@ -14,7 +14,6 @@ export default function Documents() {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data.results);
                 setAssignments(Object.entries(data.results).map(([id, assignment]) => ({ id, ...assignment })));
             })
     }, []);
@@ -36,8 +35,6 @@ export default function Documents() {
     for (let number = 1; number <= totalPages; number++) {
         paginationItems.push(<Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}> {number} </Pagination.Item>);
     }
-
-    console.log(assignments);
 
     return <Container className="mt-4 pb-4">
         

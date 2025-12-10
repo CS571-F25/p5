@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, Button, Form, Dropdown, Row, Col } from "react-bootstrap";
 
-
 const statusChoices = {
     "todo": { background: "#e8d9ff", color: "#5e3a8c", label: "To Do" },
     "in-progress": { background: "#ffd4d4", color: "#b32424", label: "In Progress" },

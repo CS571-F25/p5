@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Row, Col, Card } from "react-bootstrap";
+import { Button, Row, Col, Card } from "react-bootstrap";
 
 export default function NextAssignmentCard(props) {
 
@@ -17,20 +17,20 @@ export default function NextAssignmentCard(props) {
         (a) => a.status === "in-progress" || a.status === "todo"
     );
 
-    return <Row className="justify-content-center mb-2" style={{ maxWidth: "500px", margin: "0 auto" }}>
-        <Col xs={12}>
-            <Card className="mt-3"
-                style={{
-                    backgroundColor: "#d0e8ff",
-                    color: "#005089ff"
-                }}>
+    return <Row className="justify-content-center mb-2">
+        <Col>
+            <Card className="mt-3">
                 <Card.Body className="text-center">
                     <Card.Title>Your next assignment is:</Card.Title>
-                    <Card.Text>
-                        <strong>{nextAssignment.name}</strong>
-                        <br />
-                        Due: {nextAssignment.duedate}
-                    </Card.Text>
+                    <Card.Text style={{ fontSize: "1.4rem", fontWeight: "700" }}>{nextAssignment.name}</Card.Text>
+                        <Row className="justify-content-center mb-0">
+                            <Col xs="auto">
+                                <Button variant="primary" className="rounded-pill" style={{ backgroundColor: "#d0e8ff", color: "#005fa3", border: "none" }}>{nextAssignment.duedate}</Button>
+                            </Col>
+                            <Col xs="auto">
+                                <Button variant="secondary" className="rounded-pill" style={{ backgroundColor: "#ffe8c2", color: "#a36200", border: "none" }}>{nextAssignment.subject}</Button>
+                            </Col>
+                        </Row>
                 </Card.Body>
             </Card>
         </Col>
