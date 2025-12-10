@@ -7,33 +7,29 @@ export default function NotesPage() {
     const navigate = useNavigate();
     const [assignment, setAssignment] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [reload, setReload] = useState(0);
 
     useEffect(() => {
-        const savedNotes = localStorage.getItem(`notes-${id}`);
-
         fetch("https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments", {
             method: "GET",
             headers: { "X-CS571-ID": CS571.getBadgerId() },
         })
-            .then(res => res.json())
-            .then(data => {
-                const assignmentsArray = Object.entries(data.results).map(
-                    ([key, a]) => ({ id: key, ...a })
-                );
+            .then((res) => res.json())
+            .then((data) => {
+                const assignmentsArray = Object.entries(data.results).map(([id, a]) => {
+                    const localNotes = localStorage.getItem(`assignment_notes_${id}`);
+                    return {
+                        id,
+                        ...a,
+                        notes: localNotes || a.notes,
+                    };
+                });
+
                 const found = assignmentsArray.find(a => a.id.toString() === id.toString());
-
-                if (!found) {
-                    setAssignment(null);
-                } else {
-                    setAssignment({
-                        ...found,
-                        notes: savedNotes ?? found.notes ?? ""
-                    });
-                }
-
+                setAssignment(found || null);
                 setLoading(false);
             });
-    }, [id]);
+    }, [id, reload]);
 
     const handleSaveNotes = (newText) => {
         const updatedAssignment = { ...assignment, notes: newText };
@@ -49,6 +45,8 @@ export default function NotesPage() {
             body: JSON.stringify(updatedAssignment)
         }).then(() => handleReload());
     };
+
+    const handleReload = () => setReload((prev) => prev + 1);
 
     if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>
         Loading assignment...

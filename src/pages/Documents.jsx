@@ -24,7 +24,6 @@ export default function Documents() {
 
     const cardsPerPage = 12;
 
-
     const filtered = assignments.filter(a =>
         a.name.toLowerCase().includes(search.toLowerCase())
     );
@@ -41,6 +40,7 @@ export default function Documents() {
     console.log(assignments);
 
     return <Container className="mt-4 pb-4">
+        
         <Form.Group controlId="searchInput">
             <Form.Control
                 type="text"
@@ -64,14 +64,12 @@ export default function Documents() {
             })}
         </Row>
 
-        {
-            totalPages > 1 && (
-                <Pagination className="justify-content-center mt-4">
-                    <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
-                    {paginationItems}
-                    <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
-                </Pagination>
-            )
-        }
-    </Container >
+        {totalPages > 1 && (
+            <Pagination className="justify-content-center mt-4">
+                <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
+                {paginationItems}
+                <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
+            </Pagination>
+        )}
+    </Container>
 }
