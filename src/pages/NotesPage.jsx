@@ -35,9 +35,19 @@ export default function NotesPage() {
             });
     }, [id]);
 
-    const handleSaveNotes = (text) => {
-        setAssignment(prev => ({ ...prev, notes: text }));
-        localStorage.setItem(`notes-${id}`, text);
+    const handleSaveNotes = (newText) => {
+        const updatedAssignment = { ...assignment, notes: newText };
+        localStorage.setItem(`assignment_notes_${assignment.id}`, newText);
+
+        handleUpdate(assignment, updatedAssignment);
+    };
+
+    const handleUpdate = (assignment, updatedAssignment) => {
+        fetch(`https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments?id=${assignment.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", "X-CS571-ID": CS571.getBadgerId() },
+            body: JSON.stringify(updatedAssignment)
+        }).then(() => handleReload());
     };
 
     if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>
