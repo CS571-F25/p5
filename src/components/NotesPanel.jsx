@@ -1,78 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button, Stack } from "react-bootstrap";
+import { Button, Stack, Offcanvas, Form, Spinner } from "react-bootstrap";
 
-const styles = {
-    panel: {
-        position: "fixed",
-        top: 0,
-        right: 0,
-        width: "800px",
-        height: "100vh",
-        backgroundColor: "white",
-        boxShadow: "-2px 0 8px rgba(0,0,0,0.2)",
-        padding: "20px",
-        zIndex: 1050,
-        display: "flex",
-        flexDirection: "column"
-    },
-    closeButton: {
-        alignSelf: "flex-end",
-        border: "none",
-        fontSize: "24px",
-        background: "none",
-        cursor: "pointer",
-        color: "black"
-    },
-    title: {
-        fontSize: "22px",
-        fontWeight: "bold",
-        textAlign: "center",
-        marginBottom: "24px"
-    },
-    textarea: {
-        width: "100%",
-        flexGrow: 1,
-        resize: "none",
-        borderRadius: "8px",
-        border: "1px solid #ccc",
-        padding: "10px",
-        fontSize: "15px",
-        marginBottom: "10px",
-        color: "black"
-    },
-    subjectButton: {
-        border: "none",
-        backgroundColor: "#ffe8c2",
-        color: "#a36200",
-        padding: "10px 16px",
-        borderRadius: "20px",
-        marginRight: "12px",
-        cursor: "default",
-        fontWeight: 500
-    },
-    dateButton: {
-        border: "none",
-        backgroundColor: "#d0e8ff",
-        color: "#005fa3",
-        padding: "10px 16px",
-        borderRadius: "20px",
-        marginRight: "12px",
-        cursor: "default",
-        fontWeight: 500
-    },
-    statusButton: {
-        border: "none",
-        backgroundColor: "#e5e5e5",
-        color: "#333",
-        padding: "10px 16px",
-        borderRadius: "20px",
-        cursor: "pointer",
-        fontWeight: 500
-    },
-    subheading: {
-        alignSelf: "center",
-        marginBottom: "10px"
-    }
+const statusStyling = {
+    "todo": { background: "#e8d9ff", color: "#5e3a8c", label: "To Do" },
+    "in-progress": { background: "#ffd4d4", color: "#b32424", label: "In Progress" },
+    "done": { background: "#c9f7d7", color: "#1e7a44", label: "Done" }
 };
 
 export default function NotesPanel({ assignment, onSaveNotes, onClose, fullScreen }) {
@@ -113,35 +45,34 @@ export default function NotesPanel({ assignment, onSaveNotes, onClose, fullScree
     else if (localNotes !== lastSavedNotes) saveButtonText = "Save";
     else saveButtonText = "Saved!";
 
-    const panelStyle = fullScreen
-        ? { ...styles.panel, width: "100vw", left: 0, right: 0, top: 0, height: "100vh" }
-        : styles.panel;
-
     return (
-        <div style={panelStyle}>
-            <button style={styles.closeButton} onClick={onClose}>×</button>
+        <Offcanvas show={true} onHide={onClose} placement="end" background={false} scroll={true} className="d-flex flex-column pt-2" style={{ width: "50rem" }}>
+            <Offcanvas.Header className="justify-content-center" closeButton>
+                <Offcanvas.Title className="text-center w-100">{assignment.name}</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body className="d-flex flex-column flex-grow-1">
+                <Stack direction="horizontal" gap={4} className="justify-content-center mb-3">
+                    <Button variant="secondary" className="rounded-pill" style={{ backgroundColor: "#ffe8c2", color: "#a36200", border: "none" }}>{assignment.subject}</Button>
+                    <Button variant="primary" className="rounded-pill" style={{ backgroundColor: "#d0e8ff", color: "#005fa3", border: "none" }}>{assignment.duedate}</Button>
+                    <Button variant="secondary" className="rounded-pill" style={{ backgroundColor: statusStyling[assignment.status].background, color: statusStyling[assignment.status].color, border: "none" }}>
+                        {assignment.status === "todo" ? "To Do" :
+                            assignment.status === "in-progress" ? "In Progress" : "Done"}
+                    </Button>
+                </Stack>
 
-            <div style={styles.title}>{assignment.name}</div>
+                <Form.Control
+                    as="textarea"
+                    value={localNotes}
+                    onChange={(e) => setLocalNotes(e.target.value)}
+                    placeholder="Write your notes here..."
+                    className="flex-grow-1 mb-3"
+                    style={{ minHeight: "300px" }}
+                />
 
-            <Stack direction="horizontal" gap={3} style={styles.subheading}>
-                <button style={styles.subjectButton}>{assignment.subject}</button>
-                <button style={styles.dateButton}>{assignment.duedate}</button>
-                <button style={styles.statusButton}>
-                    {assignment.status === "todo" ? "To Do" :
-                        assignment.status === "in-progress" ? "In Progress" : "Done"}
-                </button>
-            </Stack>
-
-            <textarea
-                style={styles.textarea}
-                value={localNotes}
-                onChange={(e) => setLocalNotes(e.target.value)}
-                placeholder="Write your notes here..."
-            />
-
-            <Button variant="primary" style={{ backgroundColor: "#d4edda", color: "#155724", border: "none" }} className="rounded-pill" onClick={() => handleSave(localNotes)} disabled={isSaving || localNotes === lastSavedNotes}>
-                {saveButtonText}
-            </Button>
-        </div>
+                <Button variant="primary" style={{ backgroundColor: "#d4edda", color: "#155724", border: "none" }} className="rounded-pill" onClick={() => handleSave(localNotes)} disabled={isSaving || localNotes === lastSavedNotes}>
+                    {saveButtonText}
+                </Button>
+            </Offcanvas.Body>
+        </Offcanvas>
     );
 }

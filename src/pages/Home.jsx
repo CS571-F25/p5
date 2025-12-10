@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Container, Row, Col, Button, Stack, Form } from "react-bootstrap";
+import { Container, Row, Col, Button, Stack, Form, Spinner } from "react-bootstrap";
 import AssignmentBar from "../components/AssignmentBar";
 import NotesPanel from "../components/NotesPanel";
 import AddAssigmentModal from "../components/AddAssignmentModal";
@@ -10,6 +10,7 @@ export default function Home() {
     const [openNotes, setOpenNotes] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [studyTimeStart, setStudyTimeStart] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const [searchTitle, setSearchTitle] = useState("");
     const [filterSubject, setFilterSubject] = useState("");
@@ -43,7 +44,9 @@ export default function Home() {
                     };
                 });
                 setAssignments(assignmentsArray);
-            });
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
     }, [reload]);
 
     const handleOpenNotes = (index) => {
@@ -165,6 +168,16 @@ export default function Home() {
     }
 
     const uniqueSubjects = [...new Set(assignments.map(a => a.subject?.trim()).filter(s => s && s.length > 0))].sort();
+
+    if (loading) {
+        return (
+            <Container className="text-center mt-5">
+                <Spinner animation="border" role="status" className="mt-3">
+                    <span className="visually-hidden">Loading assignments...</span>
+                </Spinner>
+            </Container>
+        );
+    }
 
     return (
         <Container className="mt-4 pb-4">

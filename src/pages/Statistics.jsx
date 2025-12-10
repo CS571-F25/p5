@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Spinner } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import NextAssignmentCard from "../components/NextAssignmentCard";
@@ -30,9 +30,8 @@ export default function Statistics() {
     if (loading) {
         return (
             <Container className="text-center mt-5">
-                <h1>Statistics</h1>
                 <Spinner animation="border" role="status" className="mt-3">
-                    <span className="visually-hidden">Loading...</span>
+                    <span className="visually-hidden">Loading statistics...</span>
                 </Spinner>
             </Container>
         );

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Row, Col, Form, Pagination } from "react-bootstrap";
+import { Container, Card, Row, Col, Form, Pagination, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import DocumentCard from "../components/DocumentCard";
 
 export default function Documents() {
     const [assignments, setAssignments] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         fetch("https://cs571api.cs.wisc.edu/rest/f25/bucket/assignments", {
             method: "GET",
@@ -15,7 +17,9 @@ export default function Documents() {
             .then(res => res.json())
             .then(data => {
                 setAssignments(Object.entries(data.results).map(([id, assignment]) => ({ id, ...assignment })));
+                setLoading(false);
             })
+            .catch(() => setLoading(false));
     }, []);
 
     const [search, setSearch] = useState("");
@@ -40,6 +44,16 @@ export default function Documents() {
     }
 
     const uniqueSubjects = [...new Set(assignments.map(a => a.subject?.trim()).filter(s => s && s.length > 0))].sort();
+
+    if (loading) {
+        return (
+            <Container className="text-center mt-5">
+                <Spinner animation="border" role="status" className="mt-3">
+                    <span className="visually-hidden">Loading documents...</span>
+                </Spinner>
+            </Container>
+        );
+    }
 
     return <Container className="mt-4 pb-4">
         
