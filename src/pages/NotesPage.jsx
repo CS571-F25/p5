@@ -47,7 +47,7 @@ export default function NotesPage() {
             method: "PUT",
             headers: { "Content-Type": "application/json", "X-CS571-ID": CS571.getBadgerId() },
             body: JSON.stringify(updatedAssignment)
-        }).then(() => handleReload());
+        });
     };
 
     if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>
