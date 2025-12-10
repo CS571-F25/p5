@@ -82,8 +82,9 @@ export default function NotesPanel({ assignment, onSaveNotes, onClose, fullScree
     const saveTimeout = useRef(null);
 
     useEffect(() => {
-        setLocalNotes(assignment.notes ?? "");
-        setLastSavedNotes(assignment.notes ?? "");
+        if (localNotes === undefined) {
+            setLocalNotes(assignment.notes);
+        }
     }, [assignment.id]);
 
 

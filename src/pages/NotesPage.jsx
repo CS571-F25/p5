@@ -7,6 +7,7 @@ export default function NotesPage() {
     const navigate = useNavigate();
     const [assignment, setAssignment] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [reload, setReload] = useState(0);
 
     useEffect(() => {
         const savedNotes = localStorage.getItem(`notes-${id}`);
@@ -47,8 +48,10 @@ export default function NotesPage() {
             method: "PUT",
             headers: { "Content-Type": "application/json", "X-CS571-ID": CS571.getBadgerId() },
             body: JSON.stringify(updatedAssignment)
-        });
+        }).then(() => handleReload());
     };
+
+    const handleReload = () => setReload((prev) => prev + 1);
 
     if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>
         Loading assignment...
