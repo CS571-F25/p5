@@ -24,13 +24,6 @@ export default function Documents() {
 
     const cardsPerPage = 12;
 
-    const handleSaveNotes = (id, newNotes) => {
-        setAssignments(prev =>
-            prev.map(a =>
-                a.id === id ? { ...a, notes: newNotes } : a
-            )
-        );
-    };
 
     const filtered = assignments.filter(a =>
         a.name.toLowerCase().includes(search.toLowerCase())
@@ -48,17 +41,20 @@ export default function Documents() {
     console.log(assignments);
 
     return <Container className="mt-4 pb-4">
-        <Form.Control
-            type="text"
-            placeholder="Search documents..."
-            value={search}
-            onChange={(e) => {
-                setSearch(e.target.value);
-                setCurrentPage(1);
-            }}
-            xs={12}
-            className="mb-3"
-        />
+        <Form.Group controlId="searchInput">
+            <Form.Label>Search documents...</Form.Label>
+            <Form.Control
+                type="text"
+                placeholder="Search documents..."
+                value={search}
+                onChange={(e) => {
+                    setSearch(e.target.value);
+                    setCurrentPage(1);
+                }}
+                xs={12}
+                className="mb-3"
+            />
+        </Form.Group>
 
         <Row className="g-4 justify-content-center" style={{ minHeight: "500px" }}>
             {currentAssignments.map((assignment) => {
@@ -68,12 +64,14 @@ export default function Documents() {
             })}
         </Row>
 
-        {totalPages > 1 && (
-            <Pagination className="justify-content-center mt-4">
-                <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
-                {paginationItems}
-                <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
-            </Pagination>
-        )}
-    </Container>
+        {
+            totalPages > 1 && (
+                <Pagination className="justify-content-center mt-4">
+                    <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
+                    {paginationItems}
+                    <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
+                </Pagination>
+            )
+        }
+    </Container >
 }

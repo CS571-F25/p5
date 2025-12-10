@@ -177,95 +177,111 @@ export default function Home() {
 
             <Row className="justify-content-center mb-4">
                 <Col lg="6" xs="3">
-                    <Form.Control type="text" placeholder="Search Assignments" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
+                    <Form.Group controlId="Search Assigments">
+                        <Form.Control type="text" placeholder="Search Assignments" id="Search Assignemnts" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
+                    </Form.Group>
                 </Col>
                 <Col lg="2" xs="3">
-                    <Form.Control type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
+                    <Form.Group controlId="Date">
+                        <Form.Control type="date" value={filterDate} id="date" onChange={(e) => setFilterDate(e.target.value)} />
+                    </Form.Group>
                 </Col>
                 <Col lg="2" xs="3">
-                    <Form.Select value={filterSubject} onChange={(e) => setFilterSubject(e.target.value)}>
-                        <option value="">Any Subject</option>
-                        {uniqueSubjects.map(subject => <option key={subject} value={subject}>{subject}</option>)}
-                    </Form.Select>
+                    <Form.Group controlId="filter subjects">
+                        <Form.Select value={filterSubject} id="filterSubject" onChange={(e) => setFilterSubject(e.target.value)}>
+                            <option value="">Any Subject</option>
+                            {uniqueSubjects.map(subject => <option key={subject} value={subject}>{subject}</option>)}
+                        </Form.Select>
+                    </Form.Group>
                 </Col>
                 <Col lg="2" xs="3">
-                    <Form.Select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-                        <option value="">Any Status</option>
-                        <option value="todo">To Do</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="done">Done</option>
-                    </Form.Select>
+                    <Form.Group controlId="filter subjects">
+                        <Form.Select value={filterStatus} id="filterStatus" onChange={(e) => setFilterStatus(e.target.value)}>
+                            <option value="">Any Status</option>
+                            <option value="todo">To Do</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="done">Done</option>
+                        </Form.Select>
+                    </Form.Group>
                 </Col>
             </Row>
 
             <Container onClick={() => toggleAccordion("in-progress")} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
                 {accordionOpen["in-progress"] ? "▼" : "▶"} In Progress <span className="text-muted" style={{ fontWeight: "normal" }}>({groupedAssignments["in-progress"].length})</span>
             </Container>
-            {accordionOpen["in-progress"] && (
-                <Stack gap={3} className="mb-3">
-                    {groupedAssignments["in-progress"].map((assignment) => (
-                        <AssignmentBar
-                            key={assignment.id}
-                            {...assignment}
-                            onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
-                            onDateChange={(newDate) => handleDateChange(assignment, newDate)}
-                            onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
-                            onDelete={() => handleDelete(assignment)}
-                        />
-                    ))}
-                    {groupedAssignments["in-progress"].length === 0 && <Container className="text-muted">No assignments in progress!</Container>}
-                </Stack>
-            )}
+            {
+                accordionOpen["in-progress"] && (
+                    <Stack gap={3} className="mb-3">
+                        {groupedAssignments["in-progress"].map((assignment) => (
+                            <AssignmentBar
+                                key={assignment.id}
+                                {...assignment}
+                                onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
+                                onDateChange={(newDate) => handleDateChange(assignment, newDate)}
+                                onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
+                                onDelete={() => handleDelete(assignment)}
+                            />
+                        ))}
+                        {groupedAssignments["in-progress"].length === 0 && <Container className="text-muted">No assignments in progress!</Container>}
+                    </Stack>
+                )
+            }
 
             <Container onClick={() => toggleAccordion("todo")} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
                 {accordionOpen["todo"] ? "▼" : "▶"} To Do <span className="text-muted" style={{ fontWeight: "normal" }}>({groupedAssignments["todo"].length})</span>
             </Container>
-            {accordionOpen["todo"] && (
-                <Stack gap={3} className="mb-3">
-                    {groupedAssignments["todo"].map((assignment) => (
-                        <AssignmentBar
-                            key={assignment.id}
-                            {...assignment}
-                            onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
-                            onDateChange={(newDate) => handleDateChange(assignment, newDate)}
-                            onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
-                            onDelete={() => handleDelete(assignment)}
-                        />
-                    ))}
-                    {groupedAssignments["todo"].length === 0 && <Container className="text-muted">No assignments to do!</Container>}
-                </Stack>
-            )}
+            {
+                accordionOpen["todo"] && (
+                    <Stack gap={3} className="mb-3">
+                        {groupedAssignments["todo"].map((assignment) => (
+                            <AssignmentBar
+                                key={assignment.id}
+                                {...assignment}
+                                onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
+                                onDateChange={(newDate) => handleDateChange(assignment, newDate)}
+                                onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
+                                onDelete={() => handleDelete(assignment)}
+                            />
+                        ))}
+                        {groupedAssignments["todo"].length === 0 && <Container className="text-muted">No assignments to do!</Container>}
+                    </Stack>
+                )
+            }
 
             <Container onClick={() => toggleAccordion("done")} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
                 {accordionOpen["done"] ? "▼" : "▶"} Done <span className="text-muted" style={{ fontWeight: "normal" }}>({groupedAssignments["done"].length})</span>
             </Container>
-            {accordionOpen["done"] && (
-                <Stack gap={3} className="mb-3">
-                    {groupedAssignments["done"].map((assignment) => (
-                        <AssignmentBar
-                            key={assignment.id}
-                            {...assignment}
-                            onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
-                            onDateChange={(newDate) => handleDateChange(assignment, newDate)}
-                            onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
-                            onDelete={() => handleDelete(assignment)}
-                        />
-                    ))}
-                    {groupedAssignments["done"].length === 0 && <Container className="text-muted">No assignments done yet!</Container>}
-                </Stack>
-            )}
+            {
+                accordionOpen["done"] && (
+                    <Stack gap={3} className="mb-3">
+                        {groupedAssignments["done"].map((assignment) => (
+                            <AssignmentBar
+                                key={assignment.id}
+                                {...assignment}
+                                onStatusChange={(newStatus) => handleStatusChange(assignment, newStatus)}
+                                onDateChange={(newDate) => handleDateChange(assignment, newDate)}
+                                onNotesClick={() => handleOpenNotes(assignments.indexOf(assignment))}
+                                onDelete={() => handleDelete(assignment)}
+                            />
+                        ))}
+                        {groupedAssignments["done"].length === 0 && <Container className="text-muted">No assignments done yet!</Container>}
+                    </Stack>
+                )
+            }
 
-            {openNotes != null && (
-                <NotesPanel
-                    assignment={assignments[openNotes]}
-                    onClose={handleCloseNotes}
-                    onSaveNotes={(newNotes) => handleSaveNotes(assignments[openNotes].id, newNotes)}
-                    fullScreen={false}
-                />
-            )}
+            {
+                openNotes != null && (
+                    <NotesPanel
+                        assignment={assignments[openNotes]}
+                        onClose={handleCloseNotes}
+                        onSaveNotes={handleSaveNotes}
+                        fullScreen={false}
+                    />
+                )
+            }
 
             <AddAssigmentModal show={showModal} onClose={() => setShowModal(false)} onSubmit={handleReload} />
-        </Container>
+        </Container >
     );
 }
 
