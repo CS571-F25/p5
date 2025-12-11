@@ -26,7 +26,7 @@ export default function Documents() {
     const [filter, setFilter] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
-    const cardsPerPage = 12;
+    const cardsPerPage = 9;
 
     const filtered = assignments.filter(a => {
         const searchMatch = a.name.toLowerCase().includes(search.toLowerCase());
@@ -40,7 +40,7 @@ export default function Documents() {
 
     const paginationItems = [];
     for (let number = 1; number <= totalPages; number++) {
-        paginationItems.push(<Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}> {number} </Pagination.Item>);
+        paginationItems.push(<Pagination.Item as="button" key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}> {number} </Pagination.Item>);
     }
 
     const uniqueSubjects = [...new Set(assignments.map(a => a.subject?.trim()).filter(s => s && s.length > 0))].sort();
@@ -60,10 +60,12 @@ export default function Documents() {
         <Form.Group controlId="searchInput">
             <Row>
                 <Col lg="9" xs="8">
-                    <Form.Control type="text" placeholder="Search documents" value={search} aria-label="Search documents" onChange={(e) => {setSearch(e.target.value); setCurrentPage(1);}} className="mb-3" />
+                    <Form.Label htmlFor="searchDocuments" className="visually-hidden">Search documents</Form.Label>
+                    <Form.Control  id="searchDocuments" type="text" placeholder="Search documents" value={search} aria-label="Search documents" onChange={(e) => {setSearch(e.target.value); setCurrentPage(1);}} className="mb-3" />
                 </Col>
                 <Col lg="3" xs="4">
-                    <Form.Select value={filter} onChange={(e) => setFilter(e.target.value)}>
+                    <Form.Label htmlFor="filterBySubject" className="visually-hidden">Filter documents ny subject</Form.Label>
+                    <Form.Select  id="filterBySubject" value={filter} onChange={(e) => setFilter(e.target.value)} aria-label="Filter documents by subject">
                         <option value="">Any Subject</option>
                         {uniqueSubjects.map(subject => <option key={subject} value={subject}>{subject}</option>)}
                     </Form.Select>

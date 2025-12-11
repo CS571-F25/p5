@@ -33,27 +33,27 @@ export default function StatCards(props) {
     return (
         <Row className="gx-3 gy-3 justify-content-center mt-2 mb-5">
             <Col xs={12} sm={6} md={3}>
-                <Card className="text-center p-3 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center" style={{ backgroundColor: "#e0e0e0", color: "#6c757d" }}>
-                    <h5 className="mb-2">Total Assignments</h5>
-                    <div className="fw-bold" style={{ fontSize: "1.75rem" }}>{totalAssignments}</div>
+                <Card className="text-center p-3 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center" style={{ backgroundColor: "#e0e0e0", color: "#42464C" }}>
+                    <Card.Title className="mb-2">Total Assignments</Card.Title>
+                    <Card.Text className="fw-bold" style={{ fontSize: "1.75rem" }}>{totalAssignments}</Card.Text>
                 </Card>
             </Col>
             <Col xs={12} sm={6} md={3}>
-                <Card className="text-center p-3 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center" style={{ background: "#e8d9ff", color: "#5e3a8c" }}>
-                    <h5 className="mb-2">Due in the Next 7 Days</h5>
-                    <div className="fw-bold" style={{ fontSize: "1.75rem" }}>{assignmentsDueThisWeek}</div>
+                <Card className="text-center p-3 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center" style={{ backgroundColor: "#e8d9ff", color: "#573681" }}>
+                    <Card.Title className="mb-2">Due in the Next 7 Days</Card.Title>
+                    <Card.Text className="fw-bold" style={{ fontSize: "1.75rem" }}>{assignmentsDueThisWeek}</Card.Text>
                 </Card>
             </Col>
             <Col xs={12} sm={6} md={3}>
-                <Card className="text-center p-3 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center" style={{ background: "#c9f7d7", color: "#1e7a44" }}>
-                    <h5 className="mb-2">Completed Assignments</h5>
-                    <div className="fw-bold" style={{ fontSize: "1.75rem" }}>{completedAssignments}</div>
+                <Card className="text-center p-3 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center" style={{ backgroundColor: "#d4edda", color: "#145222" }}>
+                    <Card.Title className="mb-2">Completed Assignments</Card.Title>
+                    <Card.Text className="fw-bold" style={{ fontSize: "1.75rem" }}>{completedAssignments}</Card.Text>
                 </Card>
             </Col>
             <Col xs={12} sm={6} md={3}>
-                <Card className="text-center p-3 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center" style={{ background: "#ffd4d4", color: "#b32424" }}>
-                    <h5 className="mb-2">Overdue Assignments</h5>
-                    <div className="fw-bold" style={{ fontSize: "1.75rem" }}>{overdueAssignments}</div>
+                <Card className="text-center p-3 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center" style={{ backgroundColor: "#ffd4d4", color: "#881B1B" }}>
+                    <Card.Title className="mb-2">Overdue Assignments</Card.Title>
+                    <Card.Text className="fw-bold" style={{ fontSize: "1.75rem" }}>{overdueAssignments}</Card.Text>
                 </Card>
             </Col>
         </Row>

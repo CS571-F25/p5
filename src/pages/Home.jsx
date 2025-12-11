@@ -188,20 +188,23 @@ export default function Home() {
 
             <Row className="justify-content-center mb-4">
                 <Col lg="6" xs="4">
-                    <Form.Control type="text" placeholder="Search Assignments" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
+                    <Form.Label htmlFor="searchAssignments" className="visually-hidden">Search assignments</Form.Label>
+                    <Form.Control id="searchAssignments" type="text" placeholder="Search assignments" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
                 </Col>
                 <Col lg="3" xs="4">
-                <Form.Control type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
+                    <Form.Label htmlFor="filterByDueDate" className="visually-hidden">Filter assignments by due date</Form.Label>
+                    <Form.Control id="filterByDueDate" type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
                 </Col>
                 <Col lg="3" xs="4">
-                    <Form.Select value={filterSubject} onChange={(e) => setFilterSubject(e.target.value)}>
+                    <Form.Label htmlFor="filterBySubject" className="visually-hidden">Filter assignments by subject</Form.Label>
+                    <Form.Select id="filterBySubject" value={filterSubject} onChange={(e) => setFilterSubject(e.target.value)}>
                         <option value="">Any Subject</option>
                         {uniqueSubjects.map(subject => <option key={subject} value={subject}>{subject}</option>)}
                     </Form.Select>
                 </Col>
             </Row>
 
-            <Container onClick={() => toggleAccordion("in-progress")} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
+            <Container role="button" aria-expanded={accordionOpen["in-progress"]} aria-label={`Toggle In Progress assignments, currently ${accordionOpen["in-progress"] ? "expanded" : "collapsed"}`} onClick={() => toggleAccordion("in-progress")} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") toggleAccordion("in-progress"); }} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
                 {accordionOpen["in-progress"] ? "▼" : "▶"} In Progress <span className="text-muted" style={{ fontWeight: "normal" }}>({groupedAssignments["in-progress"].length})</span>
             </Container>
             {accordionOpen["in-progress"] && (
@@ -220,7 +223,7 @@ export default function Home() {
                 </Stack>
             )}
 
-            <Container onClick={() => toggleAccordion("todo")} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
+            <Container  role="button" aria-expanded={accordionOpen["todo"]} aria-label={`Toggle To Do assignments, currently ${accordionOpen["todo"] ? "expanded" : "collapsed"}`} onClick={() => toggleAccordion("todo")} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") toggleAccordion("todo"); }} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
                 {accordionOpen["todo"] ? "▼" : "▶"} To Do <span className="text-muted" style={{ fontWeight: "normal" }}>({groupedAssignments["todo"].length})</span>
             </Container>
             {accordionOpen["todo"] && (
@@ -239,7 +242,7 @@ export default function Home() {
                 </Stack>
             )}
 
-            <Container onClick={() => toggleAccordion("done")} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
+            <Container  role="button" aria-expanded={accordionOpen["done"]} aria-label={`Toggle Done assignments, currently ${accordionOpen["done"] ? "expanded" : "collapsed"}`} onClick={() => toggleAccordion("done")} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") toggleAccordion("done"); }} className="mb-3" style={{ cursor: "pointer", fontWeight: "bold", fontSize: "1.2rem" }}>
                 {accordionOpen["done"] ? "▼" : "▶"} Done <span className="text-muted" style={{ fontWeight: "normal" }}>({groupedAssignments["done"].length})</span>
             </Container>
             {accordionOpen["done"] && (

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Button, Container, Row, Col } from "react-bootstrap";
+import { Button, Badge, Card, Row, Col } from "react-bootstrap";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 
 const statusStyling = {
-    "todo": { background: "#e8d9ff", color: "#5e3a8c", label: "To Do" },
-    "in-progress": { background: "#ffd4d4", color: "#b32424", label: "In Progress" },
-    "done": { background: "#c9f7d7", color: "#1e7a44", label: "Done" }
+    "todo": { background: "#e8d9ff", color: "#573681", label: "To Do" },
+    "in-progress": { background: "#ffd4d4", color: "#881B1B", label: "In Progress" },
+    "done": { background: "#d4edda", color: "#145222", label: "Done" }
 };
 
 export default function AssignmentCalendar(props) {
@@ -32,41 +32,46 @@ export default function AssignmentCalendar(props) {
     return <>
         <Row className="gx-3 gy-3 justify-content-center mb-3">
             <Col>
-                <div className="p-3 shadow-sm rounded mt-3 border"
+                <Card className="p-3 shadow-sm rounded mt-3 border"
                     style={{ textAlign: "center" }}>
-                    <h4 className="mb-3">Select a Date</h4>
+                    <Card.Title id="calendar-label" className="mb-3">Select a Date</Card.Title>
+                    <Card.Text id="calendar-instructions" className="visually-hidden">Select a date to view the assignments due on that day.</Card.Text>
                     <Calendar
                         onClickDay={(date) => setSelectedDate(date)}
                         value={selectedDate}
                         className="m-auto"
+                        aria-labelledby="calendar-label"
+                        aria-describedby="calendar-instructions"
                     />
-                </div>
+                </Card>
             </Col>
         </Row>
 
         {selectedDate && (
             <Row className="mt-4 justify-content-center">
                 <Col>
-                    <div className="p-3 rounded shadow-sm border">
-                        <h4 className="text-center mb-3">
+                    <Card className="p-3 rounded shadow-sm border">
+                        <Card.Title className="text-center mb-3">
                             Assignments Due on {selectedDate.toLocaleDateString()}
-                        </h4>
-                        {assignmentsOnSelectedDate.length === 0 ? (
-                            <p className="text-center text-muted">No assignments due on this day.</p>
-                        ) : (
-                            <ul className="list-group">
-                                {assignmentsOnSelectedDate.map(a => (
-                                    <li key={a.id} className="list-group-item d-flex justify-content-between">
-                                        <Col className="d-flex align-items-center">
-                                            {a.name}
-                                        </Col>
-                                        <Button variant="secondary" className="rounded-pill me-3" style={{ backgroundColor: "#ffe8c2", color: "#a36200", border: "none" }}>{a.subject}</Button>
-                                        <Button variant="secondary" className="rounded-pill" style={{ backgroundColor: statusStyling[a.status].background, color: statusStyling[a.status].color, border: "none" }}>{a.status === "todo" ? "To Do" : a.status === "in-progress" ? "In Progress" : "Done"}</Button>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
+                        </Card.Title>
+                        <Card.Body>
+                            {assignmentsOnSelectedDate.length === 0 ? (
+                                <Card.Text className="text-center text-muted">No assignments due on this day.</Card.Text>
+                            ) : (
+                                <ul className="list-group">
+                                    {assignmentsOnSelectedDate.map(a => (
+                                        <li key={a.id} className="list-group-item d-flex justify-content-between">
+                                            <Col className="d-flex align-items-center">
+                                                {a.name}
+                                            </Col>
+                                            <span aria-label={`Subject: ${a.subject}`} className="rounded-pill px-3 py-1 me-3" style={{ backgroundColor: "#FFE7C2", color: "#704300", border: "none" }}>{a.subject}</span>
+                                            <span aria-label={`Status: ${a.status}`} className="rounded-pill px-3 py-1" style={{ backgroundColor: statusStyling[a.status].background, color: statusStyling[a.status].color, border: "none" }}>{a.status === "todo" ? "To Do" : a.status === "in-progress" ? "In Progress" : "Done"}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </Card.Body>
+                    </Card>
                 </Col>
             </Row>
         )}

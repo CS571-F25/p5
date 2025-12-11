@@ -1,10 +1,10 @@
 import React from "react";
 import { Card, Button, Form, Dropdown, Row, Col } from "react-bootstrap";
 
-const statusChoices = {
-    "todo": { background: "#e8d9ff", color: "#5e3a8c", label: "To Do" },
-    "in-progress": { background: "#ffd4d4", color: "#b32424", label: "In Progress" },
-    "done": { background: "#c9f7d7", color: "#1e7a44", label: "Done" }
+const statusStyling = {
+    "todo": { background: "#e8d9ff", color: "#573681", label: "To Do" },
+    "in-progress": { background: "#ffd4d4", color: "#881B1B", label: "In Progress" },
+    "done": { background: "#d4edda", color: "#145222", label: "Done" }
 };
 
 const formatForInput = (date) => {
@@ -20,7 +20,7 @@ const formatForAPI = (date) => {
 
 export default function AssignmentBar(props) {
 
-    const currentColor = statusChoices[props.status] || {
+    const currentColor = statusStyling[props.status] || {
         background: "#e5e5e5",
         color: "#333",
         label: ""
@@ -36,26 +36,27 @@ export default function AssignmentBar(props) {
                     </Col>
 
                     <Col xs="auto">
-                        <Form.Control type="date" value={formatForInput(props.duedate)} onChange={e => props.onDateChange(formatForAPI(e.target.value))} className="rounded-pill" style={{ backgroundColor: "#d0e8ff", color: "#005fa3", border: "none", "width": "140px" }} />
+                        <Form.Label htmlFor="dueDate" className="visually-hidden">Due Date</Form.Label>
+                        <Form.Control id="dueDate" type="date" value={formatForInput(props.duedate)} onChange={e => props.onDateChange(formatForAPI(e.target.value))} className="rounded-pill" style={{ backgroundColor: "#d0e8ff", color: "#004A80", border: "none", "width": "140px" }} />
                     </Col>
 
                     <Col xs="auto">
-                        <Button variant="warning" onClick={props.onNotesClick} className="rounded-pill" style={{ backgroundColor: "#ffe8c2", color: "#a36200", border: "none" }}>Notes</Button>
+                        <Button aria-label="Open notes panel" onClick={props.onNotesClick} className="rounded-pill" style={{ backgroundColor: "#FFE7C2", color: "#704300", border: "none" }}>Notes</Button>
                     </Col>
 
                     <Col xs="auto">
                         <Dropdown onSelect={(key) => props.onStatusChange(key)}>
-                            <Dropdown.Toggle style={{ backgroundColor: currentColor.background, color: currentColor.color, border: "none" }} className="rounded-pill">{currentColor.label}</Dropdown.Toggle>
+                            <Dropdown.Toggle aria-label={`Change status (current: ${currentColor.label})`} style={{ backgroundColor: currentColor.background, color: currentColor.color, border: "none" }} className="rounded-pill">{currentColor.label}</Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item key="todo" eventKey="todo" style={{ color: statusChoices["todo"].color}}>To Do</Dropdown.Item>
-                                <Dropdown.Item key="in-progress" eventKey="in-progress" style={{ color: statusChoices["in-progress"].color}}>In Progress</Dropdown.Item>
-                                <Dropdown.Item key="done" eventKey="done" style={{ color: statusChoices["done"].color}}>Done</Dropdown.Item>
+                                <Dropdown.Item key="todo" eventKey="todo" style={{ color: statusStyling["todo"].color}}>To Do</Dropdown.Item>
+                                <Dropdown.Item key="in-progress" eventKey="in-progress" style={{ color: statusStyling["in-progress"].color}}>In Progress</Dropdown.Item>
+                                <Dropdown.Item key="done" eventKey="done" style={{ color: statusStyling["done"].color}}>Done</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col>
 
                     <Col xs="auto">
-                        <Button variant="danger" className="rounded-pill" style={{ backgroundColor: "#e0e0e0", color: "#6c757d", border: "none" }} onClick={props.onDelete}>✕</Button>
+                        <Button aria-label="Delete assignment" className="rounded-pill" style={{ backgroundColor: "#e0e0e0", color: "#42464C", border: "none" }} onClick={props.onDelete}>✕</Button>
                     </Col>
                 </Row>
             </Card.Body>

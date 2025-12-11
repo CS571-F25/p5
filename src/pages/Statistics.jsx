@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Spinner } from "react-bootstrap";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
-import NextAssignmentCard from "../components/NextAssignmentCard";
+import NextAssignmentCard from "../components/nextAssignmentCard";
 import StatCards from "../components/StatCards";
 import AssignmentCalendar from "../components/AssignmentCalendar";
 

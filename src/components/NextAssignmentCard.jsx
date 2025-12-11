@@ -25,10 +25,10 @@ export default function NextAssignmentCard(props) {
                     <Card.Text style={{ fontSize: "1.4rem", fontWeight: "700" }}>{nextAssignment.name}</Card.Text>
                         <Row className="justify-content-center mb-0">
                             <Col xs="auto">
-                                <Button variant="primary" className="rounded-pill" style={{ backgroundColor: "#d0e8ff", color: "#005fa3", border: "none" }}>{nextAssignment.duedate}</Button>
+                                <span variant="primary" className="rounded-pill px-3 py-1" style={{ backgroundColor: "#d0e8ff", color: "#005fa3", border: "none" }}>{nextAssignment.duedate}</span>
                             </Col>
                             <Col xs="auto">
-                                <Button variant="secondary" className="rounded-pill" style={{ backgroundColor: "#ffe8c2", color: "#a36200", border: "none" }}>{nextAssignment.subject}</Button>
+                                <span variant="secondary" className="rounded-pill px-3 py-1" style={{ backgroundColor: "#ffe8c2", color: "#a36200", border: "none" }}>{nextAssignment.subject}</span>
                             </Col>
                         </Row>
                 </Card.Body>

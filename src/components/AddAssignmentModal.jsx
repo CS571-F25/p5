@@ -62,24 +62,24 @@ export default function AddAssigmentModal({ show, onClose, onSubmit }) {
         </Modal.Header>
 
         <Modal.Body>
-            <Form>
-                <Form.Group>
-                    <Form.Label>Assignment Name</Form.Label>
-                    <Form.Control type="text" value={newAssignment.name} onChange={(e) => setNewAssignment({...newAssignment, name: e.target.value})} />
+            <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="assignmentName">
+                    <Form.Label htmlFor="assignmentName">Assignment Name</Form.Label>
+                    <Form.Control id="assignmentName" type="text" value={newAssignment.name} onChange={(e) => setNewAssignment({...newAssignment, name: e.target.value})} />
                 </Form.Group>
-                <Form.Group className="mt-3">
-                    <Form.Label>Subject</Form.Label>
-                    <Form.Control type="text" value={newAssignment.subject} onChange={(e) => setNewAssignment({...newAssignment, subject: e.target.value})} />
+                <Form.Group controlId="subjectInput" className="mt-3">
+                    <Form.Label htmlFor="subjectInput">Subject</Form.Label>
+                    <Form.Control if="subjectInput" type="text" value={newAssignment.subject} onChange={(e) => setNewAssignment({...newAssignment, subject: e.target.value})} />
                 </Form.Group>
-                <Form.Group className="mt-3">
-                    <Form.Label>Due Date</Form.Label>
-                    <Form.Control type="date" value={newAssignment.duedate} onChange={(e) => setNewAssignment({...newAssignment, duedate: e.target.value})} />
+                <Form.Group controlId="dueDateInput" className="mt-3">
+                    <Form.Label htmlFor="dueDateInput">Due Date</Form.Label>
+                    <Form.Control id="dueDateInput" type="date" value={newAssignment.duedate} onChange={(e) => setNewAssignment({...newAssignment, duedate: e.target.value})} />
                 </Form.Group>
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="secondary"  style={{ backgroundColor: "#e0e0e0", color: "#6c757d", border: "none" }} className="rounded-pill" onClick={onClose}>Cancel</Button>
-            <Button variant="primary"  style={{ backgroundColor: "#d4edda", color: "#155724", border: "none" }} className="rounded-pill" onClick={handleSubmit}>Add Assignment</Button>
+            <Button type="button" variant="secondary"  style={{ backgroundColor: "#e0e0e0", color: "#42464C", border: "none" }} className="rounded-pill" onClick={onClose}>Cancel</Button>
+            <Button type="submit" variant="primary"  style={{ backgroundColor: "#d4edda", color: "#145222", border: "none" }} className="rounded-pill" onClick={handleSubmit}>Add Assignment</Button>
         </Modal.Footer>
     </Modal>
 }

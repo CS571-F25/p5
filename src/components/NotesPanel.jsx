@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button, Stack, Offcanvas, Form, Spinner } from "react-bootstrap";
+import { Button, Stack, Offcanvas, Form } from "react-bootstrap";
 
 const statusStyling = {
-    "todo": { background: "#e8d9ff", color: "#5e3a8c", label: "To Do" },
-    "in-progress": { background: "#ffd4d4", color: "#b32424", label: "In Progress" },
-    "done": { background: "#c9f7d7", color: "#1e7a44", label: "Done" }
+    "todo": { background: "#e8d9ff", color: "#573681", label: "To Do" },
+    "in-progress": { background: "#ffd4d4", color: "#881B1B", label: "In Progress" },
+    "done": { background: "#d4edda", color: "#145222", label: "Done" }
 };
 
 export default function NotesPanel({ assignment, onSaveNotes, onClose, fullScreen }) {
@@ -52,16 +52,18 @@ export default function NotesPanel({ assignment, onSaveNotes, onClose, fullScree
             </Offcanvas.Header>
             <Offcanvas.Body className="d-flex flex-column flex-grow-1">
                 <Stack direction="horizontal" gap={4} className="justify-content-center mb-3">
-                    <Button variant="secondary" className="rounded-pill" style={{ backgroundColor: "#ffe8c2", color: "#a36200", border: "none" }}>{assignment.subject}</Button>
-                    <Button variant="primary" className="rounded-pill" style={{ backgroundColor: "#d0e8ff", color: "#005fa3", border: "none" }}>{assignment.duedate}</Button>
-                    <Button variant="secondary" className="rounded-pill" style={{ backgroundColor: statusStyling[assignment.status].background, color: statusStyling[assignment.status].color, border: "none" }}>
+                    <span aria-label={`Subject: ${assignment.subject}`} className="rounded-pill px-3 py-1" style={{ backgroundColor: "#ffe8c2", color: "#a36200", border: "none" }}>{assignment.subject}</span>
+                    <span aria-label={`Due Date: ${assignment.duedate}`} className="rounded-pill px-3 py-1" style={{ backgroundColor: "#d0e8ff", color: "#005fa3", border: "none" }}>{assignment.duedate}</span>
+                    <span aria-label={`Status: ${assignment.status}`} className="rounded-pill px-3 py-1" style={{ backgroundColor: statusStyling[assignment.status].background, color: statusStyling[assignment.status].color, border: "none" }}>
                         {assignment.status === "todo" ? "To Do" :
                             assignment.status === "in-progress" ? "In Progress" : "Done"}
-                    </Button>
+                    </span>
                 </Stack>
 
+                <Form.Label htmlFor="notes-textarea" className="visually-hidden">Notes</Form.Label>
                 <Form.Control
                     as="textarea"
+                    id="notes-textarea"
                     value={localNotes}
                     onChange={(e) => setLocalNotes(e.target.value)}
                     placeholder="Write your notes here..."
@@ -69,7 +71,7 @@ export default function NotesPanel({ assignment, onSaveNotes, onClose, fullScree
                     style={{ minHeight: "300px" }}
                 />
 
-                <Button variant="primary" style={{ backgroundColor: "#d4edda", color: "#155724", border: "none" }} className="rounded-pill" onClick={() => handleSave(localNotes)} disabled={isSaving || localNotes === lastSavedNotes}>
+                <Button variant="primary" style={{ backgroundColor: "#d4edda", color: "#145222", border: "none" }} className="rounded-pill" onClick={() => handleSave(localNotes)} disabled={isSaving || localNotes === lastSavedNotes}>
                     {saveButtonText}
                 </Button>
             </Offcanvas.Body>
